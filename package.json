@@ -1,0 +1,19 @@
+{
+  "name": "motorcycle-report-project",
+  "version": "0.0.2",
+  "description": "A sample project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "express": "*",
+	"body-parser" : "*",
+	"mongodb" : "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TornMan/Motorcy_Report"
+  },
+  "license": "TornMan"
+}
