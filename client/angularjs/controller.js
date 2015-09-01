@@ -1,7 +1,8 @@
 /* global app , url_nodejs_localhost, app,NProgress,Location,crossid_jquery_toangular */
 
 app.controller('HomeCtrl', function ($scope, $rootScope) {
-
+    NProgress.start();
+    NProgress.done();
 });
 
 app.controller('ReportDataCtrl', function ($scope, $rootScope, $http, $sce) {
@@ -73,8 +74,8 @@ app.controller('ReportDataCtrl', function ($scope, $rootScope, $http, $sce) {
         $scope.all_count = 0;
         $scope.head_count = 0;
         $scope.comment_count = 0;
-        NProgress.start();
         if (check_date_undefined(st_date, en_date)) {
+            NProgress.start();
             var start_time = change_date_format(st_date) + "T00:00:00.000Z";
             var end_time = change_date_format(en_date) + "T23:59:59.000Z";
             if ($scope.type_choose === "head_only") {
@@ -112,15 +113,18 @@ app.controller('ReportModelCtrl', function ($scope, $rootScope) {
 });
 
 app.controller('QuestionManageCtrl', function ($scope, $rootScope, $http) {
+    NProgress.start();
     $scope.reload_table = function () {
         $scope.question_word = "";
         $http.post(url_nodejs_localhost + "/query_question", {}).success(function (arr_question) {
             $scope.arr_question = arr_question;
+            NProgress.done();
         });
     };
     $scope.reload_table();
 
     $scope.add_question = function (question_word) {
+        NProgress.start();
         $http.post(url_nodejs_localhost + "/insert_question", {question_word: question_word}).success(function () {
             $scope.reload_table();
         });
@@ -129,6 +133,7 @@ app.controller('QuestionManageCtrl', function ($scope, $rootScope, $http) {
     $scope.delete_question = function (delete_question) {
         var con_check = confirm("ต้องการลบ '" + delete_question + "' ใช่หรือไม่ ?");
         if (con_check === true) {
+            NProgress.start();
             $http.post(url_nodejs_localhost + "/delete_question", {delete_question: delete_question}).success(function () {
                 $scope.reload_table();
             });
@@ -140,8 +145,9 @@ app.controller('ModelManageCtrl', function ($scope, $rootScope, $http) {
     $scope.brand_choose = "Honda";
     $scope.orderField1 = 'main_word';
     $scope.isASC = false;
-
+    NProgress.start();
     $scope.refresh_model = function () {
+
         $http.post(url_nodejs_localhost + "/query_model", {}).success(function (arr_model) {
             var new_arr_word = [];
             for (var i = 0; i < arr_model.length; i++) {
@@ -154,13 +160,14 @@ app.controller('ModelManageCtrl', function ($scope, $rootScope, $http) {
             }
             $scope.arr_model = new_arr_word;
             $scope.new_model = "";
-
+            NProgress.done();
         });
     };
 
     $scope.refresh_model();
 
     $scope.add_model = function (new_model, brand_choose) {
+        NProgress.start();
         var obj = {};
         obj.main_word = new_model;
         obj.brand = brand_choose;
@@ -175,6 +182,7 @@ app.controller('ModelManageCtrl', function ($scope, $rootScope, $http) {
     $scope.edit_model = function (main_word, syn_word) {
         var edit_syn = prompt("Edit Syn - Syn1,Syn2,Syn3 | Syn1 , Syn2  ", syn_word);
         if (edit_syn !== syn_word && edit_syn !== null) {
+            NProgress.start();
             var arr_syn = edit_syn.split(" , ");
             console.log(arr_syn);
             $http.post(url_nodejs_localhost + "/update_model", {main_word: main_word, syn_word: JSON.stringify(arr_syn)}).success(function () {
@@ -186,6 +194,7 @@ app.controller('ModelManageCtrl', function ($scope, $rootScope, $http) {
     $scope.delete_model = function (main_word) {
         var con_check = confirm("ต้องการลบ '" + main_word + "' ใช่หรือไม่ ?");
         if (con_check === true) {
+            NProgress.start();
             $http.post(url_nodejs_localhost + "/delete_model", {main_word: main_word}).success(function () {
                 $scope.refresh_model();
             });
@@ -195,12 +204,14 @@ app.controller('ModelManageCtrl', function ($scope, $rootScope, $http) {
 
 app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
     $scope.type_choose = "negative";
-
+    NProgress.start();
     $http.post(url_nodejs_localhost + "/query_polar", {type_polar: "negative"}).success(function (arr_docs) {
         $scope.arr_negative = arr_docs;
-    });
-    $http.post(url_nodejs_localhost + "/query_polar", {type_polar: "positive"}).success(function (arr_docs) {
-        $scope.arr_positive = arr_docs;
+        $http.post(url_nodejs_localhost + "/query_polar", {type_polar: "positive"}).success(function (arr_docs) {
+            $scope.arr_positive = arr_docs;
+            NProgress.done();
+        });
+
     });
 
     $scope.add_polar = function (polar_word) {
@@ -209,7 +220,7 @@ app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
         obj.type = $scope.type_choose;
         obj.length = polar_word.length;
         $scope.new_polar_word = "";
-
+        NProgress.start();
         $http.post(url_nodejs_localhost + "/insert_polar", {arr_obj: JSON.stringify(obj)}).success(function () {
             $http.post(url_nodejs_localhost + "/query_polar", {type_polar: $scope.type_choose}).success(function (arr_docs) {
                 if ($scope.type_choose === "negative") {
@@ -217,15 +228,16 @@ app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
                 } else {
                     $scope.arr_positive = arr_docs;
                 }
+                NProgress.done();
             });
         });
     };
-    
-    $scope.add_polar_list = function(polar_list) {
+
+    $scope.add_polar_list = function (polar_list) {
         var arr_obj = [];
-        
+        NProgress.start();
         var arr_polar_list = polar_list.split("\n");
-        for(var i = 0;i<arr_polar_list.length;i++){
+        for (var i = 0; i < arr_polar_list.length; i++) {
             var obj = {};
             obj.word = arr_polar_list[i];
             obj.type = $scope.type_choose;
@@ -239,6 +251,7 @@ app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
                 } else {
                     $scope.arr_positive = arr_docs;
                 }
+                NProgress.done();
             });
         });
     };
@@ -246,9 +259,11 @@ app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
     $scope.delete_negative = function (word) {
         var con_check = confirm("ต้องการลบ '" + word + "' ใช่หรือไม่ ?");
         if (con_check === true) {
+            NProgress.start();
             $http.post(url_nodejs_localhost + "/delete_polar", {word: word}).success(function () {
                 $http.post(url_nodejs_localhost + "/query_polar", {type_polar: "negative"}).success(function (arr_docs) {
                     $scope.arr_negative = arr_docs;
+                    NProgress.done();
                 });
             });
         }
@@ -257,9 +272,11 @@ app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
     $scope.delete_positive = function (word) {
         var con_check = confirm("ต้องการลบ '" + word + "' ใช่หรือไม่ ?");
         if (con_check === true) {
+            NProgress.start();
             $http.post(url_nodejs_localhost + "/delete_polar", {word: word}).success(function () {
                 $http.post(url_nodejs_localhost + "/query_polar", {type_polar: "positive"}).success(function (arr_docs) {
                     $scope.arr_positive = arr_docs;
+                    NProgress.done();
                 });
             });
         }
@@ -276,7 +293,7 @@ app.controller('DictManageCtrl', function ($scope, $http, $timeout, $window) {
         NProgress.start();
         $http.post(url_nodejs_localhost + "/query_dict", {}).success(function (arr_docs) {
             $scope.count_word = "กำลังโหลดคำ...";
-            alert_long_time("15 - 30 วินาที", "กำลังโหลดคำศัพท์จากพจนานุกรมจำนวน "+arr_docs.length+" คำ มาแสดงลงตาราง");
+            alert_long_time("15 - 30 วินาที", "กำลังโหลดคำศัพท์จากพจนานุกรมจำนวน " + arr_docs.length + " คำ มาแสดงลงตาราง");
             $timeout(function () {
 
                 $scope.arr_obj = arr_docs;
