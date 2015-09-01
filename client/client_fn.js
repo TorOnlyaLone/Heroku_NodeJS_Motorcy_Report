@@ -1,6 +1,6 @@
 /* global location,NProgress */
 
-var url_nodejs_localhost = "http://localhost:5000";
+var url_nodejs_localhost = "https://motorcy-report.herokuapp.com";
 
 NProgress.configure({
     minimum: 0.08,
