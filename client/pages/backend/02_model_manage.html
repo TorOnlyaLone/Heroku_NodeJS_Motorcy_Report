@@ -1,0 +1,83 @@
+<script>
+    /* global new_polar_word,brand_name,new_model,brand_choose,search_model,arr_model,temp,syn_list,main_word,orderField2,orderField1 */
+
+</script>
+
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+            <br/>
+            <h1>Motorcycle Model</h1>
+            <div class="specific-background">
+                <div class="row" >
+                    <div class="col-xs-6">
+                        <h4>New Model</h4>
+                        <input style="width:100%;" type="text" ng-model="new_model" 
+                               placeholder="Model Name"  
+                               onfocus="this.placeholder = ''" 
+                               onblur="this.placeholder = 'New Model'"/><br/><br/>
+                        <h4>Brand</h4>
+                        <div>
+                            <input type="radio" ng-model="brand_choose" value="Honda" > Honda <br/>
+                            <input type="radio" ng-model="brand_choose" value="Yamaha" > Yamaha <br/>
+                            <input type="radio" ng-model="brand_choose" value="Suzuki" > Suzuki <br/>
+                            <input type="radio" ng-model="brand_choose" value="Kawasaki" > Kawasaki <br/>
+                            <input type="radio" ng-model="brand_choose" value="Triumph" > Triumph <br/>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <h4>Synonym</h4>
+                        <textarea id="syn_list" rows="8" style="width:100%;" placeholder="1 Line / 1 Syn."  
+                                  onfocus="this.placeholder = ''" 
+                                  onblur="this.placeholder = '1 Line / 1 Syn.'" >{{new_model}}</textarea>
+                    </div>
+                </div>
+                <br/>
+                <div align="center">
+                    <button  ng-click="add_model(new_model, brand_choose)" style="width: 90%;" class="btn btn-success" >Add</button>
+                </div>
+            </div>
+            <br/>
+            <div align="right">
+                <i class="fa fa-search"></i>&nbsp;
+                <input type="text" ng-model="search_model"
+                       placeholder="Search Model" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Search Model'" />
+            </div>
+            <br/>
+            <table style="width: 97%;" class="table table-condensed table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+
+                        <th><a href="" ng-click="orderField1 = 'main_word';
+                            isASC = !isASC;">Model</a></th>
+                        <th>Syn</th>
+                        <th><a href="" ng-click="orderField2 = 'brand';
+                            isASC = !isASC;">Brand</a></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="temp in arr_model|orderBy :[orderField2,orderField1]:isASC | filter : search_model" >
+                        <td>{{$index + 1}}</td>
+                        <td>{{temp.main_word}}</td>
+                        <td>{{temp.syn_word}}</td>
+                        <td>{{temp.brand}}</td>
+                        <td>
+                            &nbsp;
+                            <a href="">
+                                <i ng-click="edit_model(temp.main_word, temp.syn_word)" class="fa fa-edit"></i>
+                            </a>
+                            &nbsp;
+                            <a href="">
+                                <i ng-click="delete_model(temp.main_word)" class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>

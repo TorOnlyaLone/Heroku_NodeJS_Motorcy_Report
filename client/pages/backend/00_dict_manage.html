@@ -1,0 +1,96 @@
+<script>
+    /* global arr_obj,new_dict_word,$index,count_word,word_search,word,orderField1,orderField2,UNKNOWN,dict_list */
+    function insert_one_dict() {
+        var arr_obj = [];
+        var obj = {};
+        obj.word = document.getElementById("new_dict_word").value;
+        obj.length = (obj.word).length;
+        arr_obj.push(obj);
+        insertArrayWordToDict(arr_obj);
+    }
+    function insert_multi_dict() {
+        var word_list = (document.getElementById("new_multi_word").value).split("\n");
+        console.log(word_list);
+
+        var arr_obj = [];
+        for (var i = 0; i < word_list.length; i++) {
+            var obj = {};
+            obj.word = word_list[i];
+            obj.length = (obj.word).length;
+            arr_obj.push(obj);
+        }
+        insertArrayWordToDict(arr_obj);
+    }
+</script>
+
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+
+            <br/>
+            <h1>Global Dictionary</h1>
+            <div class="specific-background">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h4>Add 1 Word</h4>
+                        <input style="width: 100%;" type="text" id="new_dict_word" ng-model="new_dict_word"
+                               placeholder="New Word" 
+                               onfocus="this.placeholder = ''" 
+                               onblur="this.placeholder = 'New Word'" /><br/><br/>
+                        <button style="width: 100%;" onclick="insert_one_dict()" class="btn btn-success" >Add</button>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <h4>Add More Words</h4>
+                        <textarea style="width: 100%;" rows="5" id="new_multi_word"
+                                  placeholder="1 Line / 1 Word" 
+                                  onfocus="this.placeholder = ''" 
+                                  onblur="this.placeholder = '1 Line / 1 Word'"></textarea><br/><br/>
+                        <button style="width: 100%;" onclick="insert_multi_dict()" class="btn btn-success" >Add</button>
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div align="left">
+                <button ng-click="show_word()" class="btn btn-danger" >Show Word to Table</button>
+            </div> <br/>
+
+
+            <span style="float: right;" >
+                <i class="fa fa-search"></i>&nbsp;
+                กด Ctrl+F หรือ F3 เพื่อค้นหา คำ
+            </span>
+
+            <br/><br/>
+            <table class="table table-condensed table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            <!--<a href="" ng-click="orderField1 = 'word';
+                                isASC1 = !isASC1;">--> 
+                            Words
+                            <!--</a>-->
+                        </th>
+                        <th>
+                            <!--<a href="" ng-click="orderField1 = 'length';
+                                isASC1 = !isASC1;"> -->
+                            Length
+                            <!--</a>-->
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="temp in arr_obj| orderBy:[orderField1, orderField2] | filter:{ word : word_search }" >
+                        <td>{{temp.word}}</td>
+                        <td>{{temp.length}}</td>
+                        <td>&nbsp;
+                            <a href="" ><i ng-click="del_word(temp.word)" class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </section>
+</section>

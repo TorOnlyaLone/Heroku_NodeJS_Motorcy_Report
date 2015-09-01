@@ -1,0 +1,104 @@
+<script>
+    /* global new_polar_word,type_choose,search_negative,arr_negative,$index,arr_positive,search_polar,word,polar_list */
+
+</script>
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+            <br/>
+
+            <h1>Local Polar Word</h1>
+            <div class="specific-background">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h4>New Polar Word</h4>
+                        <input style="width:100%;" type="text" ng-model="new_polar_word" 
+                               placeholder="New Polar Word"  
+                               onfocus="this.placeholder = ''" 
+                               onblur="this.placeholder = 'New Polar Word'"  />
+                        <br/>
+                        <div>
+                            <input type="radio" ng-model="type_choose" value="negative" > Negative &nbsp;
+                            <input type="radio" ng-model="type_choose" value="positive" > Positive
+                        </div><br/>
+                        <button style="width:100%;" class="btn btn-success" ng-click="add_polar(new_polar_word)" >Add</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <h4>Multiple Polar Words</h4>
+                        <textarea style="width: 100%;" rows="5" ng-model="polar_list"
+                                  placeholder="1 Line / 1 Word" 
+                                  onfocus="this.placeholder = ''" 
+                                  onblur="this.placeholder = '1 Line / 1 Word'"></textarea><br/>
+                        <div>
+                            <input type="radio" ng-model="type_choose" value="negative" > Negative &nbsp;
+                            <input type="radio" ng-model="type_choose" value="positive" > Positive
+                        </div>
+                        <br/>
+                        <button style="width:100%;" class="btn btn-success" ng-click="add_polar_list(polar_list)" >Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+
+            <div align="right">
+                <i class="fa fa-search"></i>&nbsp;
+                <input type="text" ng-model="search_polar"
+                       placeholder="Search" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Search'" />
+            </div>
+
+            <div class="row" >
+                <div class="col-xs-6">
+                    <br/>
+                    <h4>Negative &nbsp;<i class="fa fa-frown-o"></i></h4>
+
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Word</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="temp in arr_negative| filter:{ word : search_polar }" >
+                                <td>{{$index + 1}}</td>
+                                <td>{{temp.word}}</td>
+                                <td>&nbsp;
+                                    <a href="" ng-click="delete_negative(temp.word)" ><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="col-xs-6" >
+                    <br/>
+                    <h4>Positive &nbsp;<i class="fa fa-smile-o"></i></h4>
+
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Word</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="temp in arr_positive| filter:{ word : search_polar }" >
+                                <td>{{$index + 1}}</td>
+                                <td>{{temp.word}}</td>
+                                <td>&nbsp;
+                                    <a href="" ng-click="delete_positive(temp.word)" ><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

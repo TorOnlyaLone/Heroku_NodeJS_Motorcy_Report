@@ -1,0 +1,49 @@
+<script>
+    /* global question_word,search_question,$index,temp,arr_question */
+</script>
+
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+            <br/>
+            <h1>Question Word</h1>
+            <div class="specific-background">
+                <h4>New Question Word</h4>
+                <input style="width:50%;" type="text" ng-model="question_word" 
+                       placeholder="Question Word"  
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Question Word'"/>
+                <button ng-click="add_question(question_word)" style="width:30%;" class="btn btn-success" >Add</button>
+            </div>
+            <br/>
+            <div align="right">
+                <i class="fa fa-search"></i>&nbsp;
+                <input type="text" ng-model="search_question"
+                       placeholder="Search Question" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Search Question'" />
+            </div>
+            <br/>
+            <table style="width: 100%;" class="table-bordered table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Word</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="temp in arr_question | filter : search_question">
+                        <td>{{$index + 1}}</td>
+                        <td>{{temp.word}}</td>
+                        <td>
+                            <a href="">
+                                <i ng-click="delete_question(temp.word)" class="fa fa-trash-o" ></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>

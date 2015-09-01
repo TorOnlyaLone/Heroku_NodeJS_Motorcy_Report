@@ -1,0 +1,110 @@
+<script>
+    /* global st_date, type_choose, all_count, head_count, comment_count,en_date,arr_data,$index,search_data_table,hide_table_head,hide_table_comment,hide_on_table */
+    $(function () {
+        $(".datepicker").datepicker({dateFormat: 'dd - mm - yy'});
+    });
+</script>
+
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+            <div class="specific-background">
+                <h4>Choose Time</h4>
+
+                <input style="width: 45%" type="text" 
+                       class="datepicker" 
+                       placeholder="Start Date" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Start Date'" 
+                       id="st_d"  ng-model="st_date" readonly> &nbsp;<b>-</b>&nbsp;
+                <input style="width: 45%" type="text" 
+                       class="datepicker" placeholder="End Date" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'End Date'" 
+                       id="en_d"  ng-model="en_date" readonly>
+                <br/><br/>
+                <input type="radio" ng-model="type_choose" value="head_only" /> หัวกระทู้อย่างเดียว &nbsp;
+                <input type="radio" ng-model="type_choose" value="head_comment" /> หัวกระทู้และความคิดเห็น
+                <br/><br/>
+                <button style="width: 90%;" ng-click="query_data(st_date, en_date)" class="btn btn-success"> Get Data </button>
+            </div>
+            <br/>
+            <div ng-hide="hide_on_table">
+                <div align="right">
+                    <button onclick="gen_pdf()" class="btn btn-danger"><b>Report As PDF</b> <i style="font-size: 30px" class="fa fa-file-pdf-o" ></i> </button>
+                </div>
+                <br/>
+
+                <div align="right">
+                    <i class="fa fa-search"></i>&nbsp;
+                    <input type="text" ng-model="search_data_table"
+                           placeholder="Search" 
+                           onfocus="this.placeholder = ''" 
+                           onblur="this.placeholder = 'Search'" />
+                </div>
+                <div id="table_part">
+                    <div class="result_data" align="center">
+                        ข้อมูลระหว่างวันที่ <b>{{st_date}}</b><br/>ถึงวันที่ <b>{{en_date}}</b><br/>
+                        จำนวนข้อความทั้งหมด <b>{{all_count}}</b> ข้อความ <br/>
+                        แบ่งเป็นข้อความหัวกระทู้ <b>{{head_count}}</b> ข้อความ <br/>
+                        และข้อความความคิดเห็น <b>{{comment_count}}</b> ข้อความ <br/>
+                    </div>
+
+                    <br/>
+
+                    <div ng-hide="hide_table_head">
+                        <table class="table table-bordered table-striped table-condensed clearly-table" >
+                            <tr>
+                                <th>รายงานข้อมูลหัวกระทู้ </th>
+                            </tr>
+                            <tbody>
+                                <tr ng-repeat="temp in arr_data| filter : search_data_table">
+                                    <td>
+                                        <b>Pantip ID : </b><a href="http://www.pantip.com/topic/{{temp.pantip_id}}" target="_blank">{{temp.pantip_id}}</a>
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <b>Date Time :  </b>{{temp.date}} {{temp.time}}
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <b>Type :  </b>{{temp.type}}<br/><br/>
+                                        <b>Title : </b><br/>
+                                        {{temp.title}}<br/><br/>
+                                        <b>Story : </b><br/>
+                                        {{temp.story}}<br/><br/>
+
+                                        <b>Tag : </b>{{temp.tag}}<br/><br/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div ng-hide="hide_table_comment">
+                        <table class="table table-bordered table-striped table-condensed clearly-table" >
+                            <tr>
+                                <th>รายงานข้อมูล หัวกระทู้ + ความคิดเห็นในกระทู้ </th>
+                            </tr>
+                            <tbody>
+                                <tr ng-repeat="temp in arr_data_comment| filter : search_data_table">
+                                    <td>
+                                        <b>Pantip ID : </b><a href="http://www.pantip.com/topic/{{temp.pantip_id}}" target="_blank">{{temp.pantip_id}}</a>
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <b>Date Time :  </b>{{temp.date}} {{temp.time}}
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <b>Type :  </b>{{temp.type}}<br/><br/>
+                                        <b>Title : </b><br/>
+                                        {{temp.title}}<br/><br/>
+                                        <b>Story : </b><br/>
+                                        {{temp.story}}<br/><br/>
+
+                                        <b>Tag : </b>{{temp.tag}}<br/><br/>
+                                        <b>จำนวนความคิดเห็น : </b> {{temp.comment_counting}} ความคิดเห็น
+                                        <br/><br/>
+                                        <div ng-bind-html="temp.comment_text"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

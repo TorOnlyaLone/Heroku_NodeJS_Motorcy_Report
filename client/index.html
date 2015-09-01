@@ -1,8 +1,107 @@
+<!DOCTYPE html>
 <html>
-<head>
-<title>Test Title</title>
-</head>
-<body>
-Motorcycle Report 0.2
-</body>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /> <!-- use with mobile -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="viewport" content="user-scalable=no,  initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+        <meta charset="utf-8" />
+
+        <title>Motorcycle Report 0.2</title>
+
+        <script src="main_lib/jquery_2.1.4/jquery-2.1.4.min.js" type="text/javascript"></script>
+
+        <link href="main_lib/bootstrap_3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="main_lib/bootstrap_3.3.5/js/bootstrap.min.js" type="text/javascript"></script>
+
+        <link href="main_lib/mobile_angular_1.2.0/dist/css/mobile-angular-ui-hover.min.css" rel="stylesheet" type="text/css"/>
+        <link href="main_lib/mobile_angular_1.2.0/dist/css/mobile-angular-ui-base.min.css" rel="stylesheet" type="text/css"/>
+        <link href="main_lib/mobile_angular_1.2.0/dist/css/mobile-angular-ui-desktop.min.css" rel="stylesheet" type="text/css"/>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular-route.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular-resource.min.js"></script>
+
+        <script src="main_lib/mobile_angular_1.2.0/dist/js/mobile-angular-ui.min.js" type="text/javascript"></script>
+
+        <link href="other_lib/nprogress_0.2.0/n-progress.css" rel="stylesheet" type="text/css"/>
+        <script src="other_lib/nprogress_0.2.0/n-progress.js" type="text/javascript"></script>
+        
+        <link href="other_lib/jqueryUI_1.11.4/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+        <link href="other_lib/jqueryUI_1.11.4/jquery-ui.theme.min.css" rel="stylesheet" type="text/css"/>
+        <script src="other_lib/jqueryUI_1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+
+        <link href="client_style.css" rel="stylesheet" type="text/css"/>
+        <script src="client_fn.js" type="text/javascript"></script>
+
+        <script src="angularjs/app.js" type="text/javascript"></script>
+        <script src="angularjs/controller.js" type="text/javascript"></script>
+
+    </head>
+    <body ng-app="Motorcycle">
+        <div style="background-color: black; border: 5px; border-color: greenyellow;" class="sidebar sidebar-left">
+            <div class="scrollable">
+                <div style="background-color: white; border: 3px solid black;">
+                    <a href="#/home" class="btn btn-navbar btn-icon-only" >
+                        <i style="font-size: 30px" class="fa fa-home fa-navbar"></i>
+                    </a>
+
+                </div>
+
+                <div class="scrollable-content">
+                    <h1 class="app-name"><b>Menu</b></h1> 
+                    <div class="list-group">
+                        <a class="list-group-item" href="#/polar_manage">
+                            <i  class="fa fa-meh-o"></i>
+                            &nbsp;&nbsp;
+                            <b>Motorcycle Polar</b>
+                        </a>
+                        <a class="list-group-item" href="#/model_manage">
+                            <i class="fa fa-bicycle"></i>
+                            &nbsp;
+                            <b>Motorcycle Model</b>
+                        </a>
+                        <a class="list-group-item" href="#/question_manage">
+                            <i  class="fa fa-question-circle"></i>
+                            &nbsp;&nbsp;
+                            <b>Global Question Word</b>
+                        </a>
+                        <a class="list-group-item" href="#/dict_manage">
+                            <i  class="fa fa-book"></i>
+                            &nbsp;&nbsp;
+                            <b>Global Dictionary</b>
+                        </a>
+                        <h1 class="app-name"><b>Not Available</b></h1> 
+                        <a class="list-group-item" href="#/new_dict" onclick="return false;">
+                            <b>News Dictionary</b>
+                            </br><span class="mini_text">(For user upload Local dict)</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="app">
+            <div class="navbar navbar-app navbar-absolute-top">
+                <nav class="btn-group pull-left">
+                    <a class="btn btn-navbar sidebar-toggle" href ui-toggle='uiSidebarLeft'>
+                        <i style="font-size: 30px" class="fa fa-bars"></i>
+                        
+                    </a>
+                </nav>
+            </div>
+            <div class="navbar navbar-app navbar-absolute-bottom">
+                <div class="btn-group justified">
+                    <a href="#/home" class="btn btn-navbar btn-icon-only">
+                        <i style="font-size: 35px" class="fa fa-home fa-navbar"></i>
+                    </a>
+                </div>
+            </div>
+            <div class='app-body'>
+                <ng-view style="background-color: white;" class='app-content'>
+
+                </ng-view>
+            </div>
+        </div>
+
+    </body>
 </html>

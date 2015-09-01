@@ -1,0 +1,26 @@
+<script>
+    $(function () {
+        $(".datepicker").datepicker({dateFormat: 'dd-mm-yy'});
+    });
+</script>
+
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+            <div class="specific-background">
+                <h4>Choose Time</h4>
+                <input style="width: 45%" type="text" 
+                       class="datepicker" 
+                       placeholder="Start Date" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Start Date'" 
+                       id="st_d"  ng-model="st_date" readonly> &nbsp;-&nbsp;
+                <input style="width: 45%" type="text" 
+                       class="datepicker" placeholder="End Date" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'End Date'" 
+                       id="en_d"  ng-model="en_date" readonly>
+            </div>
+        </div>
+    </section>
+</section>
