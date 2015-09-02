@@ -1,0 +1,100 @@
+<script>
+    /* global new_local_word,search_local_word,arr_local_word,$index,type_chk,list_local_word */
+</script>
+
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+            <br/>
+            <h1>Local Dictionary</h1>
+            <span>
+                เก็บ คำ ที่พบบ่อยหรือสนใจเป็นพิเศษ<br/> 
+                เช่น รุ่นของรถ คำแสดงความรู้สึก ชื่อสถานที่<br/> 
+                เพื่อความถูกต้องให้กับการตัดคำภาษาไทย<br/>
+                ด้วยคำที่ไม่มีในพจนานุกรมภาษาไทย(Global)<br/>
+            </span>
+            <br/>
+            <div class="specific-background">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h4>Add 1 Word</h4>
+                        <input style="width: 100%;" type="text" ng-model="new_local_word"
+                               placeholder="New Word" 
+                               onfocus="this.placeholder = ''" 
+                               onblur="this.placeholder = 'New Word'" /><br/><br/>
+                        <h4>Add More Words</h4>
+                        <textarea style="width: 100%;" rows="6" ng-model="list_local_word"
+                                  placeholder="1 Line / 1 Word" 
+                                  onfocus="this.placeholder = ''" 
+                                  onblur="this.placeholder = '1 Line / 1 Word'"></textarea><br/>
+                    </div>
+                    <div class="col-xs-6">
+                        <h4>ประเภทของคำ</h4>
+                        (1 คำอาจอยู่ได้มากกว่า 1 ประเภท)<br/>
+                        <input type="checkbox" ng-model="type_chk1" ng-true-value="'ความรู้สึก'" ng-false-value="''"/>
+                        &nbsp;ความรู้สึก <br/>
+                        <input type="checkbox" ng-model="type_chk2" ng-true-value="'รุ่นของรถ'" ng-false-value="''"/>
+                        &nbsp;รุ่นของรถ <br/>
+                        <input type="checkbox" ng-model="type_chk3" ng-true-value="'ยี่ห้อ'" ng-false-value="''"/>
+                        &nbsp;ยี่ห้อ <br/>
+                        <input type="checkbox" ng-model="type_chk4" ng-true-value="'สถานที่'" ng-false-value="''" />
+                        &nbsp;สถานที่ <br/>
+                        <input type="checkbox" ng-model="type_chk5" ng-true-value="'ชื่อคน'" ng-false-value="''"/>
+                        &nbsp;ชื่อคน <br/>
+                        <input type="checkbox" ng-model="type_chk6" ng-false-value="''"/>
+                        &nbsp;อื่นๆ ระบุ :
+                        <input type="text" ng-model="other_chk" placeholder="Other Type" 
+                               onfocus="this.placeholder = ''" 
+                               onblur="this.placeholder = 'Other Type'"> 
+                        <br/><br/>
+                        <button style="width: 100%;" ng-click="add_local_word()" class="btn btn-success" >Add</button>
+                    </div>
+                </div>
+            </div>
+            <br/>
+
+            <div align="right">
+                <i class="fa fa-search"></i>&nbsp;
+                <input type="text" ng-model="search_local_word"
+                       placeholder="Search Word" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Search Word'" />
+            </div>
+            <br/>
+
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>
+                            No.
+                        </th>
+                        <th>
+                            <a href="" ng-click="orderField1 = 'word';
+                                isASC = !isASC;">
+                                Word
+                            </a>
+                        </th>
+                        <th>
+                            <a href="" ng-click="orderField1 = 'type';
+                                orderField2 = 'word';
+                                isASC = !isASC;">
+                                Type
+                            </a>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="temp in arr_local_word| filter:search_local_word|orderBy :[orderField1, orderField2]:isASC">
+                        <td>{{$index + 1}}</td>
+                        <td>{{temp.word}} </td>
+                        <td>{{temp.type}} </td>
+                        <td>
+                            <a href=""><i ng-click="delete_local(temp.word)" class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</section>

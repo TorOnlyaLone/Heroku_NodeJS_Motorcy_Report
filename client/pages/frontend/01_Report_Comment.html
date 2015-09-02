@@ -14,12 +14,17 @@
                        placeholder="Start Date" 
                        onfocus="this.placeholder = ''" 
                        onblur="this.placeholder = 'Start Date'" 
-                       id="st_d"  ng-model="st_date" readonly> &nbsp;-&nbsp;
+                       id="st_d"  ng-model="st_date" readonly> &nbsp;<b>-</b>&nbsp;
                 <input style="width: 45%" type="text" 
                        class="datepicker" placeholder="End Date" 
                        onfocus="this.placeholder = ''" 
                        onblur="this.placeholder = 'End Date'" 
                        id="en_d"  ng-model="en_date" readonly>
+                <br/><br/>
+                <input type="radio" ng-model="type_choose" value="head_comment" /> หัวกระทู้ + ความคิดเห็น &nbsp;
+                <input type="radio" ng-model="type_choose" value="only_comment" /> ความคิดเห็นอย่างเดียว (ไม่เอาหัวกระทู้)
+                <br/><br/>
+                <button style="width: 90%;" ng-click="query_data(st_date, en_date)" class="btn btn-success"> Get Data </button>
             </div>
         </div>
     </section>

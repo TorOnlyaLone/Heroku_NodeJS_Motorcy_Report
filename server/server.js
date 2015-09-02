@@ -33,6 +33,26 @@ app.post("/query_pantip_without_comment",function(req,res){
   });
 });
 
+app.post("/delete_motorcycle_dict",function(req,res){
+  var local_word = req.body.local_word;
+  server_fn.delete_object(url_mongodb_motorcycle,"motorcycle","local_dict",{ word : local_word },{ justOne : true },function(){
+    res.send(" ");
+  });
+});
+
+app.post("/insert_motorcycle_dict",function(req,res){
+  var arr_obj = JSON.parse(req.body.arr_obj);
+  server_fn.insert_arr_object(url_mongodb_motorcycle,"motorcycle","local_dict",arr_obj, { ordered : false }, function(){
+    res.send(" ");
+  });
+});
+
+app.post("/query_motorcycle_dict",function(req,res){
+  server_fn.find_document(url_mongodb_motorcycle,"motorcycle","local_dict",{ },{ "_id": 0 },function(arr_local_word){
+    res.send(arr_local_word);
+  });
+});
+
 app.post("/delete_question",function(req,res){
    var delete_word = req.body.delete_question;
    server_fn.delete_object(url_mongodb_thaitext,"textanalysis","question_word",{ word : delete_word },{ justOne : true },function(){

@@ -5,6 +5,81 @@ app.controller('HomeCtrl', function ($scope, $rootScope) {
     NProgress.done();
 });
 
+app.controller('MotorcyDictCtrl', function ($scope, $rootScope, $http) {
+    $scope.orderField1 = '';
+    $scope.orderField2 = '';
+    $scope.isASC = false;
+
+    $scope.reload_table = function () {
+        $scope.new_local_word = '';
+        $scope.list_local_word = '';
+        $scope.type_chk1 = '';
+        $scope.type_chk2 = '';
+        $scope.type_chk3 = '';
+        $scope.type_chk4 = '';
+        $scope.type_chk5 = '';
+        $scope.type_chk6 = '';
+        $scope.other_chk = '';
+        $http.post(url_nodejs_localhost + "/query_motorcycle_dict", {}).success(function (result) {
+            $scope.arr_local_word = result;
+            NProgress.done();
+        });
+    };
+    NProgress.start();
+    $scope.reload_table();
+
+    $scope.add_local_word = function () {
+        if ($scope.new_local_word !== '' || $scope.list_local_word !== '') {
+            NProgress.start();
+            var type_chk = '';
+            type_chk += $scope.type_chk1 !== '' ? "," + $scope.type_chk1 : '';
+            type_chk += $scope.type_chk2 !== '' ? "," + $scope.type_chk2 : '';
+            type_chk += $scope.type_chk3 !== '' ? "," + $scope.type_chk3 : '';
+            type_chk += $scope.type_chk4 !== '' ? "," + $scope.type_chk4 : '';
+            type_chk += $scope.type_chk5 !== '' ? "," + $scope.type_chk5 : '';
+            type_chk += $scope.type_chk6 && $scope.other_chk !== '' ? "," + $scope.other_chk : '';
+            type_chk = type_chk.replace(",", '');
+            var arr_obj = [];
+            if ($scope.new_local_word !== '') {
+                arr_obj.push({word: $scope.new_local_word, length: $scope.new_local_word.length, type: type_chk});
+            }
+            if ($scope.list_local_word !== '') {
+                var arr_local = $scope.list_local_word.split("\n");
+                for (var i = 0; i < arr_local.length; i++) {
+                    arr_obj.push({word: arr_local[i], length: arr_local[i].length, type: type_chk});
+                }
+            }
+            $http.post(url_nodejs_localhost + "/insert_motorcycle_dict", {arr_obj: JSON.stringify(arr_obj)}).success(function () {
+                $scope.reload_table();
+            });
+        }
+    };
+
+    $scope.delete_local = function (local_word) {
+        var con_check = confirm("ต้องการลบ '" + local_word + "' ใช่หรือไม่ ?");
+        if (con_check === true) {
+            NProgress.start();
+            $http.post(url_nodejs_localhost + "/delete_motorcycle_dict", {local_word: local_word}).success(function () {
+                $scope.reload_table();
+            });
+        }
+    };
+
+});
+
+app.controller('ReportHeadCtrl', function ($scope, $rootScope) {
+
+
+});
+app.controller('ReportCommentCtrl', function ($scope, $rootScope) {
+
+
+});
+app.controller('ReportModelCtrl', function ($scope, $rootScope) {
+
+
+});
+
 app.controller('ReportDataCtrl', function ($scope, $rootScope, $http, $sce) {
     $scope.type_choose = "head_only";
 
@@ -99,19 +174,6 @@ app.controller('ReportDataCtrl', function ($scope, $rootScope, $http, $sce) {
     };
 });
 
-app.controller('ReportHeadCtrl', function ($scope, $rootScope) {
-
-
-});
-app.controller('ReportCommentCtrl', function ($scope, $rootScope) {
-
-
-});
-app.controller('ReportModelCtrl', function ($scope, $rootScope) {
-
-
-});
-
 app.controller('QuestionManageCtrl', function ($scope, $rootScope, $http) {
     NProgress.start();
     $scope.reload_table = function () {
@@ -171,22 +233,35 @@ app.controller('ModelManageCtrl', function ($scope, $rootScope, $http) {
         var obj = {};
         obj.main_word = new_model;
         obj.brand = brand_choose;
-        obj.syn_word = document.getElementById("syn_list").value.split("\n");
+        var arr_syn = document.getElementById("syn_list").value.split("\n");
+        obj.syn_word = arr_syn;
 
         $http.post(url_nodejs_localhost + "/insert_model", {doc: JSON.stringify(obj)}).success(function (result) {
-//            $scope.refresh_model();
-            location.reload();
+            var arr_obj = [];
+            arr_obj.push({word: new_model, length: new_model.length, type: "รุ่นของรถ"});
+            for (var i = 0; i < arr_syn.length; i++) {
+                arr_obj.push({word: arr_syn[i], length: arr_syn[i].length, type: "รุ่นของรถ"});
+            }
+            $http.post(url_nodejs_localhost + "/insert_motorcycle_dict", {arr_obj: JSON.stringify(arr_obj)}).success(function (result) {
+                location.reload();
+            });
         });
     };
 
     $scope.edit_model = function (main_word, syn_word) {
-        var edit_syn = prompt("Edit Syn - Syn1,Syn2,Syn3 | Syn1 , Syn2  ", syn_word);
+        var edit_syn = prompt("Edit Syn - Syn1 , Syn2 (อย่าลืมเว้นว่างก่อนหน้าและหลัง ,) ", syn_word);
         if (edit_syn !== syn_word && edit_syn !== null) {
             NProgress.start();
             var arr_syn = edit_syn.split(" , ");
             console.log(arr_syn);
             $http.post(url_nodejs_localhost + "/update_model", {main_word: main_word, syn_word: JSON.stringify(arr_syn)}).success(function () {
-                $scope.refresh_model();
+                var arr_obj = [];
+                for (var i = 0; i < arr_syn.length; i++) {
+                    arr_obj.push({word: arr_syn[i], length: arr_syn[i].length, type: "รุ่นของรถ"});
+                }
+                $http.post(url_nodejs_localhost + "/insert_motorcycle_dict", {arr_obj: JSON.stringify(arr_obj)}).success(function (result) {
+                    $scope.refresh_model();
+                });
             });
         }
     };
@@ -215,26 +290,36 @@ app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
     });
 
     $scope.add_polar = function (polar_word) {
+
         var obj = {};
         obj.word = polar_word;
         obj.type = $scope.type_choose;
         obj.length = polar_word.length;
+
         $scope.new_polar_word = "";
+        var obj_dict = {};
+        obj_dict.word = polar_word;
+        obj_dict.type = "ความรู้สึก";
+        obj_dict.length = polar_word.length;
+
         NProgress.start();
         $http.post(url_nodejs_localhost + "/insert_polar", {arr_obj: JSON.stringify(obj)}).success(function () {
-            $http.post(url_nodejs_localhost + "/query_polar", {type_polar: $scope.type_choose}).success(function (arr_docs) {
-                if ($scope.type_choose === "negative") {
-                    $scope.arr_negative = arr_docs;
-                } else {
-                    $scope.arr_positive = arr_docs;
-                }
-                NProgress.done();
+            $http.post(url_nodejs_localhost + "/insert_motorcycle_dict", {arr_obj: JSON.stringify(obj_dict)}).success(function () {
+                $http.post(url_nodejs_localhost + "/query_polar", {type_polar: $scope.type_choose}).success(function (arr_docs) {
+                    if ($scope.type_choose === "negative") {
+                        $scope.arr_negative = arr_docs;
+                    } else {
+                        $scope.arr_positive = arr_docs;
+                    }
+                    NProgress.done();
+                });
             });
         });
     };
 
     $scope.add_polar_list = function (polar_list) {
         var arr_obj = [];
+        var arr_obj_dict = [];
         NProgress.start();
         var arr_polar_list = polar_list.split("\n");
         for (var i = 0; i < arr_polar_list.length; i++) {
@@ -243,15 +328,18 @@ app.controller('PolarManageCtrl', function ($scope, $rootScope, $http) {
             obj.type = $scope.type_choose;
             obj.length = obj.word.length;
             arr_obj.push(obj);
+            arr_obj_dict.push({word: arr_polar_list[i], length: arr_polar_list[i].length, type: "ความรู้สึก"});
         }
         $http.post(url_nodejs_localhost + "/insert_polar", {arr_obj: JSON.stringify(arr_obj)}).success(function () {
-            $http.post(url_nodejs_localhost + "/query_polar", {type_polar: $scope.type_choose}).success(function (arr_docs) {
-                if ($scope.type_choose === "negative") {
-                    $scope.arr_negative = arr_docs;
-                } else {
-                    $scope.arr_positive = arr_docs;
-                }
-                NProgress.done();
+            $http.post(url_nodejs_localhost + "/insert_motorcycle_dict", {arr_obj: JSON.stringify(arr_obj_dict)}).success(function () {
+                $http.post(url_nodejs_localhost + "/query_polar", {type_polar: $scope.type_choose}).success(function (arr_docs) {
+                    if ($scope.type_choose === "negative") {
+                        $scope.arr_negative = arr_docs;
+                    } else {
+                        $scope.arr_positive = arr_docs;
+                    }
+                    NProgress.done();
+                });
             });
         });
     };

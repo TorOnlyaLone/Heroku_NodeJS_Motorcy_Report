@@ -25,6 +25,9 @@ app.config(['$routeProvider', /* '$locationProvider',*/
         }).when('/question_manage', {
             templateUrl: '../pages/backend/03_question_manage.html',
             controller: 'QuestionManageCtrl'
+        }).when('/motorcy_dict', {
+            templateUrl: '../pages/backend/04_motorcy_dict.html',
+            controller: 'MotorcyDictCtrl'
         }).when('/report_head', {
             templateUrl: '../pages/frontend/00_Report_Head.html',
             controller: 'ReportHeadCtrl'

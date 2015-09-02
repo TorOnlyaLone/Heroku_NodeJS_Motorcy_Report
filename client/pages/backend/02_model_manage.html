@@ -50,17 +50,20 @@
                 <thead>
                     <tr>
                         <th></th>
-
-                        <th><a href="" ng-click="orderField1 = 'main_word';
-                            isASC = !isASC;">Model</a></th>
+                        <th>
+                            <a href="" ng-click="orderField1 = 'main_word';
+                                isASC = !isASC;">Model</a>
+                        </th>
                         <th>Syn</th>
-                        <th><a href="" ng-click="orderField2 = 'brand';
-                            isASC = !isASC;">Brand</a></th>
+                        <th>
+                            <a href="" ng-click="orderField2 = 'brand';
+                                isASC = !isASC;">Brand</a>
+                        </th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="temp in arr_model|orderBy :[orderField2,orderField1]:isASC | filter : search_model" >
+                    <tr ng-repeat="temp in arr_model|orderBy :[orderField2, orderField1]:isASC | filter : search_model" >
                         <td>{{$index + 1}}</td>
                         <td>{{temp.main_word}}</td>
                         <td>{{temp.syn_word}}</td>
