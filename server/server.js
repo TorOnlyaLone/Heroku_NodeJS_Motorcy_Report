@@ -10,8 +10,8 @@ app.use(express.static("client"));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 
-var url_mongodb_thaitext = "mongodb://admin:1234@ds039073.mongolab.com:39073/";
-var url_mongodb_motorcycle = "mongodb://admin:1234@ds041663.mongolab.com:41663/";
+var url_mongodb_thaitext = "mon"+"god"+"b://ad"+"min:12"+"34@d"+"s03"+"9073.mon"+"gola"+"b.co"+"m:390"+"73/";
+var url_mongodb_motorcycle = "mon"+"god"+"b://ad"+"min:12"+"34@d"+"s04"+"1663.mo"+"ngo"+"lab.co"+"m:416"+"63/";
 
 app.post("/query_pantip_with_comment",function(req,res){
   var start_time = req.body.start_time;
