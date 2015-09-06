@@ -5,7 +5,10 @@ app.controller('HomeCtrl', function ($scope, $rootScope) {
     NProgress.done();
 });
 
-app.controller('MotorcyDictCtrl', function ($scope, $rootScope, $http) {
+app.controller('TeachingWordCtrl', function ($scope, $rootScope, $http) {
+    NProgress.start();
+    NProgress.done();
+
     $scope.orderField1 = '';
     $scope.orderField2 = '';
     $scope.isASC = false;
@@ -19,6 +22,7 @@ app.controller('MotorcyDictCtrl', function ($scope, $rootScope, $http) {
         $scope.type_chk4 = '';
         $scope.type_chk5 = '';
         $scope.type_chk6 = '';
+        $scope.type_chk7 = '';
         $scope.other_chk = '';
         $http.post(url_nodejs_localhost + "/query_motorcycle_dict", {}).success(function (result) {
             $scope.arr_local_word = result;
@@ -28,7 +32,20 @@ app.controller('MotorcyDictCtrl', function ($scope, $rootScope, $http) {
     NProgress.start();
     $scope.reload_table();
 
-    $scope.add_local_word = function () {
+
+    $scope.get_data = function (st_date, en_date) {
+        if (check_date_undefined(st_date, en_date)) {
+            NProgress.start();
+            var start_time = change_date_format(st_date) + "T00:00:00.000Z";
+            var end_time = change_date_format(en_date) + "T23:59:59.000Z";
+            $http.post(url_nodejs_localhost + "/teaching_query", {start_time: start_time, end_time: end_time}).success(function (result) {
+                $scope.txt_for_read = result;
+                NProgress.done();
+            });
+        }
+    };
+    
+     $scope.add_local_word = function () {
         if ($scope.new_local_word !== '' || $scope.list_local_word !== '') {
             NProgress.start();
             var type_chk = '';
@@ -37,12 +54,10 @@ app.controller('MotorcyDictCtrl', function ($scope, $rootScope, $http) {
             type_chk += $scope.type_chk3 !== '' ? "," + $scope.type_chk3 : '';
             type_chk += $scope.type_chk4 !== '' ? "," + $scope.type_chk4 : '';
             type_chk += $scope.type_chk5 !== '' ? "," + $scope.type_chk5 : '';
-            type_chk += $scope.type_chk6 && $scope.other_chk !== '' ? "," + $scope.other_chk : '';
+            type_chk += $scope.type_chk6 !== '' ? "," + $scope.type_chk6 : '';
+            type_chk += $scope.type_chk7 && $scope.other_chk !== '' ? "," + $scope.other_chk : '';
             type_chk = type_chk.replace(",", '');
             var arr_obj = [];
-            if ($scope.new_local_word !== '') {
-                arr_obj.push({word: $scope.new_local_word, length: $scope.new_local_word.length, type: type_chk});
-            }
             if ($scope.list_local_word !== '') {
                 var arr_local = $scope.list_local_word.split("\n");
                 for (var i = 0; i < arr_local.length; i++) {
@@ -67,8 +82,14 @@ app.controller('MotorcyDictCtrl', function ($scope, $rootScope, $http) {
 
 });
 
-app.controller('ReportHeadCtrl', function ($scope, $rootScope) {
-
+app.controller('ReportHeadCtrl', function ($scope, $rootScope, $http) {
+    $scope.sentiment_head = function (start_time, end_time) {
+        start_time = change_date_format(start_time) + "T00:00:00.000Z";
+        end_time = change_date_format(end_time) + "T23:59:59.000Z";
+        $http.post(url_nodejs_localhost + "/sentiment_head", {start_time: start_time, end_time: end_time}, function (result) {
+            console.log(result);
+        });
+    };
 
 });
 app.controller('ReportCommentCtrl', function ($scope, $rootScope) {
@@ -172,6 +193,68 @@ app.controller('ReportDataCtrl', function ($scope, $rootScope, $http, $sce) {
             }
         }
     };
+});
+
+app.controller('MotorcyDictCtrl', function ($scope, $rootScope, $http) {
+    $scope.orderField1 = '';
+    $scope.orderField2 = '';
+    $scope.isASC = false;
+
+    $scope.reload_table = function () {
+        $scope.new_local_word = '';
+        $scope.list_local_word = '';
+        $scope.type_chk1 = '';
+        $scope.type_chk2 = '';
+        $scope.type_chk3 = '';
+        $scope.type_chk4 = '';
+        $scope.type_chk5 = '';
+        $scope.type_chk6 = '';
+        $scope.other_chk = '';
+        $http.post(url_nodejs_localhost + "/query_motorcycle_dict", {}).success(function (result) {
+            $scope.arr_local_word = result;
+            NProgress.done();
+        });
+    };
+    NProgress.start();
+    $scope.reload_table();
+
+    $scope.add_local_word = function () {
+        if ($scope.new_local_word !== '' || $scope.list_local_word !== '') {
+            NProgress.start();
+            var type_chk = '';
+            type_chk += $scope.type_chk1 !== '' ? "," + $scope.type_chk1 : '';
+            type_chk += $scope.type_chk2 !== '' ? "," + $scope.type_chk2 : '';
+            type_chk += $scope.type_chk3 !== '' ? "," + $scope.type_chk3 : '';
+            type_chk += $scope.type_chk4 !== '' ? "," + $scope.type_chk4 : '';
+            type_chk += $scope.type_chk5 !== '' ? "," + $scope.type_chk5 : '';
+            type_chk += $scope.type_chk6 && $scope.other_chk !== '' ? "," + $scope.other_chk : '';
+            type_chk = type_chk.replace(",", '');
+            var arr_obj = [];
+            if ($scope.new_local_word !== '') {
+                arr_obj.push({word: $scope.new_local_word, length: $scope.new_local_word.length, type: type_chk});
+            }
+            if ($scope.list_local_word !== '') {
+                var arr_local = $scope.list_local_word.split("\n");
+                for (var i = 0; i < arr_local.length; i++) {
+                    arr_obj.push({word: arr_local[i], length: arr_local[i].length, type: type_chk});
+                }
+            }
+            $http.post(url_nodejs_localhost + "/insert_motorcycle_dict", {arr_obj: JSON.stringify(arr_obj)}).success(function () {
+                $scope.reload_table();
+            });
+        }
+    };
+
+    $scope.delete_local = function (local_word) {
+        var con_check = confirm("ต้องการลบ '" + local_word + "' ใช่หรือไม่ ?");
+        if (con_check === true) {
+            NProgress.start();
+            $http.post(url_nodejs_localhost + "/delete_motorcycle_dict", {local_word: local_word}).success(function () {
+                $scope.reload_table();
+            });
+        }
+    };
+
 });
 
 app.controller('QuestionManageCtrl', function ($scope, $rootScope, $http) {

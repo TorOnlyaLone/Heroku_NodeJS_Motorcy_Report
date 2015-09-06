@@ -1,6 +1,6 @@
 <script>
-    $(function () {
-        $(".datepicker").datepicker({dateFormat: 'dd-mm-yy'});
+     $(function () {
+        $(".datepicker").datepicker({dateFormat: 'dd - mm - yy'});
     });
 </script>
 
@@ -23,7 +23,7 @@
                        id="en_d"  ng-model="en_date" readonly>
                 <br/><br/>
                 
-                <button style="width: 90%;" ng-click="sentiment_head(st_date)" class="btn btn-success"> Sentiment Head </button>
+                <button style="width: 90%;" ng-click="sentiment_head(st_date,en_date)" class="btn btn-success"> Sentiment Head </button>
             </div>
         </div>
     </section>

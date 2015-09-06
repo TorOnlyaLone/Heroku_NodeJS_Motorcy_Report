@@ -23,15 +23,15 @@ function find_document(url_mongodb,db_name,collection_name,query,projection,call
   var findDocuments = function (db, callback) {
     var collection_con = db.collection(collection_name);
     collection_con.find(query,projection).toArray(function (err, docs) {
-        console.log("Query Document");
-        callback(docs);
+      console.log("Query Document");
+      callback(docs);
     });
   };
 
   MongoClient.connect(url_mongodb + db_name, function (err, db) {
     findDocuments(db, function (docs) {
       var arr_docs = docs;
-//      console.log("Result : " + arr_docs);
+      //      console.log("Result : " + arr_docs);
       db.close();
       console.log("_________________________");
       console.log("");
@@ -44,15 +44,15 @@ function find_document_sort(url_mongodb,db_name,collection_name,query,projection
   var findDocuments = function (db, callback) {
     var collection_con = db.collection(collection_name);
     collection_con.find(query,projection).sort(sort).toArray(function (err, docs) {
-        console.log("Query Document");
-        callback(docs);
+      console.log("Query Document");
+      callback(docs);
     });
   };
 
   MongoClient.connect(url_mongodb + db_name, function (err, db) {
     findDocuments(db, function (docs) {
       var arr_docs = docs;
-//      console.log("Result : " + arr_docs);
+      //      console.log("Result : " + arr_docs);
       db.close();
       console.log("_________________________");
       console.log("");
@@ -128,6 +128,129 @@ function replace_all(str, replaceWhat, replaceTo) {
   return str;
 }
 
+function cast_arr_obj_word_to_arr(arr_store_word,arr_obj_word){
+  for(var i = 0;i<arr_obj_word.length;i++){
+    arr_store_word.push(arr_obj_word[i].word);
+  }
+};
+
+function word_segmentation(input_string,arr_store_word,callback){
+  var array_object_stat = [];
+  var index_word = 1;
+
+  var input_string = input_string;
+
+  function segment_by_array(array_length) {
+    for (var j = 0; j < array_length.length; j++) {
+      var find = array_length[j];
+      if (input_string.search(new RegExp(find, "i")) !== -1) {
+        input_string = replace_all(input_string, find, "{{" + index_word + "}}");
+        array_object_stat.push({"index_w": index_word, "word": find});
+        ++index_word;
+      }
+    }
+  }
+  segment_by_array(arr_store_word);
+
+  for(var j = 0; j < array_object_stat.length; j++){
+    var find = "{{"+array_object_stat[j].index_w+"}}";
+    input_string = replace_all(input_string,find,array_object_stat[j].word+" | ");
+  }
+  callback(input_string);
+}
+
+function segment_str(input_string,url_localdict,url_thaidict,callback){
+  var arr_store_word = [];
+  find_document(url_localdict,"motorcycle","local_dict",{ length : 14 },{ _id:0,length:0 },function(arr_word){
+    cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+    find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 14 },{ _id:0,length:0 },function(arr_word){
+      cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+      find_document(url_localdict,"motorcycle","local_dict",{ length : 13 },{ _id:0,length:0 },function(arr_word){
+        cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+        find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 13 },{ _id:0,length:0 },function(arr_word){
+          cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+          find_document(url_localdict,"motorcycle","local_dict",{ length : 12 },{ _id:0,length:0 },function(arr_word){
+            cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+            find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 12 },{ _id:0,length:0 },function(arr_word){
+              cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+              find_document(url_localdict,"motorcycle","local_dict",{ length : 11 },{ _id:0,length:0 },function(arr_word){
+                cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 11 },{ _id:0,length:0 },function(arr_word){
+                  cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                  find_document(url_localdict,"motorcycle","local_dict",{ length : 10 },{ _id:0,length:0 },function(arr_word){
+                    cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                    find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 10 },{ _id:0,length:0 },function(arr_word){
+                      cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                      find_document(url_localdict,"motorcycle","local_dict",{ length : 9 },{ _id:0,length:0 },function(arr_word){
+                        cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                        find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 9 },{ _id:0,length:0 },function(arr_word){
+                          cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                          find_document(url_localdict,"motorcycle","local_dict",{ length : 8 },{ _id:0,length:0 },function(arr_word){
+                            cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                            find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 8 },{ _id:0,length:0 },function(arr_word){
+                              cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                              find_document(url_localdict,"motorcycle","local_dict",{ length : 7 },{ _id:0,length:0 },function(arr_word){
+                                cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 7 },{ _id:0,length:0 },function(arr_word){
+                                  cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                  find_document(url_localdict,"motorcycle","local_dict",{ length : 6 },{ _id:0,length:0 },function(arr_word){
+                                    cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                    find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 6 },{ _id:0,length:0 },function(arr_word){
+                                      cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                      find_document(url_localdict,"motorcycle","local_dict",{ length : 5},{ _id:0,length:0 },function(arr_word){
+                                        cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                        find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 5 },{ _id:0,length:0 },function(arr_word){
+                                          cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                          find_document(url_localdict,"motorcycle","local_dict",{ length : 4 },{ _id:0,length:0 },function(arr_word){
+                                            cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                            find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 4 },{ _id:0,length:0 },function(arr_word){
+                                              cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                              find_document(url_localdict,"motorcycle","local_dict",{ length : 3 },{ _id:0,length:0 },function(arr_word){
+                                                cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                                find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 3 },{ _id:0,length:0 },function(arr_word){
+                                                  cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                                  find_document(url_localdict,"motorcycle","local_dict",{ length : 2 },{ _id:0,length:0 },function(arr_word){
+                                                    cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                                    find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 2 },{ _id:0,length:0 },function(arr_word){
+                                                      cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                                      find_document(url_localdict,"motorcycle","local_dict",{ length : 1 },{ _id:0,length:0 },function(arr_word){
+                                                        cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                                        find_document(url_thaidict,"textanalysis","thai_dictionary",{ length : 1 },{ _id:0,length:0 },function(arr_word){
+                                                          cast_arr_obj_word_to_arr(arr_store_word,arr_word);
+                                                          word_segmentation(input_string,arr_store_word,function(str){
+                                                            callback(str);
+                                                          });
+                                                        });
+                                                      });
+                                                    });
+                                                  });
+                                                });
+                                              });
+                                            });
+                                          });
+                                        });
+                                      });
+                                    });
+                                  });
+                                });
+                              });
+                            });
+                          });
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+}
+
 function cast_unicode_html_notation(unicode_str) {
   var output = unicode_str.replace(/&#x[0-9A-Fa-f]+;/g,
     function (htmlCode) {
@@ -143,5 +266,7 @@ function cast_unicode_html_notation(unicode_str) {
     find_document : find_document,
     delete_object : delete_object,
     update_obj : update_obj,
-    find_document_sort : find_document_sort
+    find_document_sort : find_document_sort,
+    segment_str : segment_str,
+    replace_all : replace_all
   };

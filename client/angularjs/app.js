@@ -28,6 +28,9 @@ app.config(['$routeProvider', /* '$locationProvider',*/
         }).when('/motorcy_dict', {
             templateUrl: '../pages/backend/04_motorcy_dict.html',
             controller: 'MotorcyDictCtrl'
+        }).when('/teaching_word', {
+            templateUrl: '../pages/backend/05_teaching_word.html',
+            controller: 'TeachingWordCtrl'
         }).when('/report_head', {
             templateUrl: '../pages/frontend/00_Report_Head.html',
             controller: 'ReportHeadCtrl'

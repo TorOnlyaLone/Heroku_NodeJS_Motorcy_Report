@@ -38,11 +38,18 @@
                                onfocus="this.placeholder = ''" 
                                onblur="this.placeholder = 'New Word'" /><br/><br/>
                         <button style="width: 100%;" onclick="insert_one_dict()" class="btn btn-success" >Add</button>
+                        <br/><br/>
+                        <h4>Delete 1 Word</h4>
+                        <input style="width: 100%;" type="text" id="new_dict_word" ng-model="word_for_del"
+                               placeholder="Delete Word" 
+                               onfocus="this.placeholder = ''" 
+                               onblur="this.placeholder = 'Delete Word'" /><br/><br/>
+                        <button style="width: 100%;" ng-click="del_word(word_for_del)" class="btn btn-danger" >Delete</button>
                     </div>
 
                     <div class="col-xs-6">
                         <h4>Add More Words</h4>
-                        <textarea style="width: 100%;" rows="5" id="new_multi_word"
+                        <textarea style="width: 100%;" rows="7" id="new_multi_word"
                                   placeholder="1 Line / 1 Word" 
                                   onfocus="this.placeholder = ''" 
                                   onblur="this.placeholder = '1 Line / 1 Word'"></textarea><br/><br/>

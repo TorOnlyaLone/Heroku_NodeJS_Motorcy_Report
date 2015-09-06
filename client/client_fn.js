@@ -7,13 +7,19 @@ NProgress.configure({
     template: '<div class="bar" role="bar"></div>'
 });
 
+function word_sement(str_input,callback) {
+    $.post(url_nodejs_localhost + "/test_word_segmentation", {str_test: str_input}, function (str_out) {
+        callback(str_out);
+    });
+}
+
 function alert_long_time(time_str, because) {
     alert("ระบบอาจค้าง หยุดการทำงาน หรือไม่ตอบสนอง โปรดรอสักครู่ \r\nประมาณ " + time_str +
             "\r\nเนื่องจาก " + because + "\r\n\r\nถ้าแถบโหลดสีแดงด้านบนยังไม่หายแสดงว่าระบบค้างอยู่\r\n\r\n" +
             "ถ้า เบราเซอร์ถามว่า ต้องการให้สคิร์ป 'ทำงานต่อ' หรือไม่ ให้ตอบ 'ตกลง' หรือ 'รอ' จนกว่าสคิร์ปจะทำงาน");
 }
 
-function alert_develop(){
+function alert_develop() {
     alert('กำลังพัฒนา : ยังไม่เสร็จครับ');
 }
 
@@ -78,6 +84,6 @@ function check_date_undefined(st_date, en_date) {
     }
 }
 
-function gen_pdf(){
+function gen_pdf() {
     alert("ติดต่อผู้พัฒนา");
 }
