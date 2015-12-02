@@ -14,6 +14,18 @@
     color: black;
 }
 
+.red_text{
+    color: red;
+}
+
+.green_text{
+    color: green;
+}
+
+.orange_text{
+    color: orange;
+}
+
 .clearly-table tr {
    border: 2px solid black;
 }

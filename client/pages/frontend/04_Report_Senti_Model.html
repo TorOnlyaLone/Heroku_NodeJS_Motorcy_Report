@@ -1,0 +1,117 @@
+<script>
+    $(function () {
+        $(".datepicker").datepicker({dateFormat: 'dd - mm - yy'});
+    });
+</script>
+
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <div class="container" style="width: 100%;">
+            <div class="specific-background">
+                <h4>Choose Time</h4>
+                <input style="width: 45%" type="text" class="datepicker"  placeholder="Start Date" 
+                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Start Date'" 
+                       id="st_d"  ng-model="st_date" readonly> &nbsp;<b>-</b>&nbsp;
+                <input style="width: 45%" type="text" class="datepicker" placeholder="End Date" 
+                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'End Date'" 
+                       id="en_d"  ng-model="en_date" readonly>
+                <br/><br/><h4>ประเภทของข้อมูล</h4>
+                <input type="radio" ng-model="type_choose" value="only_head" /> หัวกระทู้อย่างเดียว &nbsp;
+                <input type="radio" ng-model="type_choose" value="head_comment" /> หัวกระทู้ + ความคิดเห็น &nbsp;
+                <input type="radio" ng-model="type_choose" value="only_comment" /> ความคิดเห็นอย่างเดียว (ไม่เอาหัวกระทู้)
+                <br/><br/><h4>ประเภทการแสดงผล</h4>
+                <input type="radio" ng-model="graph_choose" value="graph_only"/> แสดงกราฟอย่างเดียว &nbsp;
+                <input type="radio" ng-model="graph_choose" value="graph_data"/> กราฟ + ข้อมูล
+                <br/><br/> <h4>เลือกยี่ห้อของกราฟ</h4>
+                <input type="checkbox" ng-model="graph_honda"/>Honda&nbsp;
+                <input type="checkbox" ng-model="graph_yamaha"/>Yamaha&nbsp;
+                <input type="checkbox" ng-model="graph_suzuki"/>Suzuki&nbsp;
+                <input type="checkbox" ng-model="graph_kawasaki"/>Kawasaki&nbsp;
+                <input type="checkbox" ng-model="graph_other"/>Other&nbsp;
+                <br/><br/>
+                <button style="width: 90%;" ng-click="sentiment_model(st_date, en_date)" class="btn btn-success"> Get Data </button>
+            </div>
+            <br/><br/>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div>
+                    <div id="chart_senti_model_honda" style="height: 300px; width: 100%;"></div>
+                    <br/><br/><br/>
+                    <div id="chart_senti_model_yamaha" style="height: 300px; width: 100%;"></div>
+                    <br/><br/><br/>
+                    <div id="chart_senti_model_suzuki" style="height: 300px; width: 100%;"></div>
+                    <br/><br/><br/>
+                    <div id="chart_senti_model_kawasaki" style="height: 300px; width: 100%;"></div>
+                    <br/><br/><br/>
+                    <div id="chart_senti_model_other" style="height: 300px; width: 100%;"></div>
+                </div> <!-- div show graph only -->
+            </div>
+        </div>
+        <br>
+        <div>
+            <div align="center">
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th><i class="fa fa-frown-o"></i>&nbsp;-</th>
+                            <th><i class="fa fa-smile-o"></i>&nbsp;+</th>
+                            <th><i class="fa fa-question-circle"></i>&nbsp;?</th>
+                            <th>Brand</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="temp in count_polar">
+                            <td>{{temp.model}}</td>
+                            <td>{{temp.nega}}</td>
+                            <td>{{temp.posi}}</td>
+                            <td>{{temp.ques}}</td>
+                            <td>{{temp.brand}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <br/>
+                    จำนวนกระทู้ที่ใช้ในการวิเคราะห์ {{topic_head_count}} กระทู้
+                    <br/>
+                    ซึ่งมีจำนวนความคิดเห็น {{comment_count}} ความคิดเห็น
+                    <br/>
+                    โดยตัดเป็นข้อความที่มีชื่อรุ่นและยี่ห้อ {{message_count}} ข้อความ
+                </div>
+            </div>
+        </div>
+
+        <br/>
+        <div id="show_data">
+            <div align="right">
+                <i class="fa fa-search"></i>&nbsp;
+                <input type="text" ng-model="search_senti_comment"
+                       placeholder="Search" 
+                       onfocus="this.placeholder = ''" 
+                       onblur="this.placeholder = 'Search'" />
+            </div>
+            <br/>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th width="5%">No.</th>
+                        <th width="70%">Message</th>
+                        <th width="10%">Brand</th>
+                        <th width="15%">Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="temp in message_by_brand| filter: search_senti_comment ">
+                        <td>{{$index + 1}}</td>
+                        <td><div ng-bind-html="temp.message"></div></td>
+                        <td>{{temp.brand}}</td>
+                        <td><div ng-bind-html="temp.star"></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        </div>
+    </section>
+</section>

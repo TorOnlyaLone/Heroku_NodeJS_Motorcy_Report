@@ -1,0 +1,26 @@
+<section class="scrollable"> 
+    <section class="scrollable-content">
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th width="5%">NO.</th>
+                    <th width="15%">Word</th>
+                    <th width="15%">Type</th>
+                    <th width="15%">Feature</th>
+                    <th width="10%">Edit Feature</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr  ng-repeat="temp in polar_list">
+                    <td>{{$index + 1}}</td>
+                    <td>{{temp.word}}</td>
+                    <td>{{temp.type}}</td>
+                    <td>{{temp.feature}}</td>
+                    <td>&nbsp;
+                        <a href="" ng-click="edit_feature(temp.word)" ><i class="fa fa-edit"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</section>

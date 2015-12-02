@@ -1,24 +1,21 @@
-/* global module, require */
+/* global require */
 
-var mongodb = require('mongodb');
-var MongoClient = require('mongodb').MongoClient;
+var mongodb = require('mongodb');var MongoClient = require('mongodb').MongoClient;
+var async = require('async');
 
-function test_connection(url_mongodb, db_name, collection_name, callback) {
+function test_connection(url_mongodb, db_name, collection_name) {
     MongoClient.connect(url_mongodb + db_name, function (err, db) {
         if (err) {
             console.log('Unable to connect to the mongoDB server. Error:', err);
         }
         else {
-            console.log("Connect correctly server");
-            //console.log(db.listCollections());
+            console.log("Connect correctly server"); //console.log(db.listCollections());
             var collection = db.collection(collection_name);
             console.log("Connect correctly COLLECTION");
             db.close();
         }
-        callback();
     });
 }
-
 function find_document(url_mongodb, db_name, collection_name, query, projection, callback2) {
     var findDocuments = function (db, callback) {
         var collection_con = db.collection(collection_name);
@@ -27,7 +24,6 @@ function find_document(url_mongodb, db_name, collection_name, query, projection,
             callback(docs);
         });
     };
-
     MongoClient.connect(url_mongodb + db_name, function (err, db) {
         findDocuments(db, function (docs) {
             var arr_docs = docs;
@@ -38,7 +34,6 @@ function find_document(url_mongodb, db_name, collection_name, query, projection,
         });
     });
 }
-
 function find_document_sort(url_mongodb, db_name, collection_name, query, projection, sort, callback2) {
     var findDocuments = function (db, callback) {
         var collection_con = db.collection(collection_name);
@@ -47,11 +42,10 @@ function find_document_sort(url_mongodb, db_name, collection_name, query, projec
             callback(docs);
         });
     };
-
     MongoClient.connect(url_mongodb + db_name, function (err, db) {
         findDocuments(db, function (docs) {
             var arr_docs = docs;
-            //console.log("Result : " + arr_docs);
+            //      console.log("Result : " + arr_docs);
             db.close();
             console.log("_________________________");
             console.log("");
@@ -59,7 +53,6 @@ function find_document_sort(url_mongodb, db_name, collection_name, query, projec
         });
     });
 }
-
 function update_obj(url_mongodb, db_name, collection_name, query, update, optional, callback2) {
     var updateDocuments = function (db, callback) {
         var collection_con = db.collection(collection_name);
@@ -68,7 +61,6 @@ function update_obj(url_mongodb, db_name, collection_name, query, update, option
             callback(result);
         });
     };
-
     MongoClient.connect(url_mongodb + db_name, function (err, db) {
         updateDocuments(db, function (result) {
             console.log("Result : " + result);
@@ -79,7 +71,6 @@ function update_obj(url_mongodb, db_name, collection_name, query, update, option
         });
     });
 }
-
 function insert_arr_object(url_mongodb, db_name, collection_name, arr_object, optional, callback2) {
     var insertDocuments = function (db, callback) {
         var collection_con = db.collection(collection_name);
@@ -88,7 +79,6 @@ function insert_arr_object(url_mongodb, db_name, collection_name, arr_object, op
             callback(result);
         });
     };
-
     MongoClient.connect(url_mongodb + db_name, function (err, db) {
         insertDocuments(db, function (result) {
             console.log("Result : " + JSON.stringify(result));
@@ -99,7 +89,6 @@ function insert_arr_object(url_mongodb, db_name, collection_name, arr_object, op
         });
     });
 }
-
 function delete_object(url_mongodb, db_name, collection_name, query, optional, callback2) {
     var removeDocument = function (db, callback) {
         var collection = db.collection(collection_name);
@@ -107,8 +96,7 @@ function delete_object(url_mongodb, db_name, collection_name, query, optional, c
             console.log("Removed the document");
             callback(result);
         });
-    }
-
+    };
     MongoClient.connect(url_mongodb + db_name, function (err, db) {
         removeDocument(db, function (result) {
             console.log("Result : " + JSON.stringify(result));
@@ -122,12 +110,11 @@ function delete_object(url_mongodb, db_name, collection_name, query, optional, c
 
 function replace_all(str, replaceWhat, replaceTo) {
     replaceWhat = replaceWhat.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    //var re = new RegExp(replaceWhat, 'g'); /*case sensitive*/
+    //    var re = new RegExp(replaceWhat, 'g'); /*case sensitive*/
     var re = new RegExp(replaceWhat, 'gi'); /*case insensitive*/
     str = str.replace(re, replaceTo);
     return str;
 }
-
 function cast_arr_obj_word_to_arr(arr_store_word, arr_obj_word) {
     for (var i = 0; i < arr_obj_word.length; i++) {
         arr_store_word.push(arr_obj_word[i].word);
@@ -142,11 +129,9 @@ function word_segmentation(input_string, arr_store_word, callback) {
 
     /*Clean String before word segment*/
     input_string = input_string.replace(/\?/g, " " + "?" + " "); //cut question
-    input_string = input_string.replace(/เเ/g, "แ"); //replace สระเอ 2 ตัว
-    input_string = input_string.replace(/(?:https?|ftp|http):\/\/\S+/g, ""); //replace ลิ้ง
-    input_string = input_string.replace(/\bwww[.]\S+/g, ""); //replace ลิ้ง
-    input_string = input_string.replace(/<.*?>/g, ""); //replace tag
-    input_string = input_string.replace(/แก้ไขข้อความ.*?น\./g,""); //remove แก้ไขข้อความเมื่อ
+    input_string = input_string.replace(/เเ/g, "�?"); //replace สระเอ 2 ตัว
+    input_string = input_string.replace(/(?:https?|ftp|http):\/\/\S+/g, ""); //เอาลิ�?�?ออ�?�?า�?�?�?อมูล
+    input_string = input_string.replace(/\bwww[.]\S+/g, ""); //เอาลิ�?�?ออ�?�?า�?�?�?อมูล
 
     function segment_by_array(array_length) {
         for (var j = 0; j < array_length.length; j++) {
@@ -168,14 +153,11 @@ function word_segmentation(input_string, arr_store_word, callback) {
 
     callback(input_string);
 }
-
 function segment_str(input_string, url_localdict, url_thaidict, callback) {
     var arr_store_word = [];
-    find_document(url_localdict, "motorcycle", "local_dict", {length: 14}, {_id: 0, length: 0},
-    function (arr_word) {
+    find_document(url_localdict, "motorcycle", "local_dict", {length: 14}, {_id: 0, length: 0}, function (arr_word) {
         cast_arr_obj_word_to_arr(arr_store_word, arr_word);
-        find_document(url_thaidict, "textanalysis", "thai_dictionary", {length: 14}, {_id: 0, length: 0},
-        function (arr_word) {
+        find_document(url_thaidict, "textanalysis", "thai_dictionary", {length: 14}, {_id: 0, length: 0}, function (arr_word) {
             cast_arr_obj_word_to_arr(arr_store_word, arr_word);
             find_document(url_localdict, "motorcycle", "local_dict", {length: 13}, {_id: 0, length: 0}, function (arr_word) {
                 cast_arr_obj_word_to_arr(arr_store_word, arr_word);
@@ -273,8 +255,7 @@ function cast_unicode_html_notation(unicode_str) {
 
 function query_model_bybrand(url_mongodb_motorcycle, brand, callback) {
     var model = [];
-    find_document(url_mongodb_motorcycle, "motorcycle", "model_word", {brand: brand}, {"_id": 0},
-    function (arr_model) {
+    find_document(url_mongodb_motorcycle, "motorcycle", "model_word", {brand: brand}, {"_id": 0}, function (arr_model) {
         for (var i = 0; i < arr_model.length; i++) {
             var arr_syn = arr_model[i].syn_word;
             for (var j = 0; j < arr_syn.length; j++) {
@@ -286,10 +267,9 @@ function query_model_bybrand(url_mongodb_motorcycle, brand, callback) {
 }
 
 function query_mocy_data_by_time(start_time, end_time, url_mongodb_motorcycle, query, projection, sort, callback) {
-    find_document_sort(url_mongodb_motorcycle, "motorcycle", "pantip_data", query, projection, sort,
-            function (arr_docs) {
-                callback(arr_docs);
-            });
+    find_document_sort(url_mongodb_motorcycle, "motorcycle", "pantip_data", query, projection, sort, function (arr_docs) {
+        callback(arr_docs);
+    });
 }
 
 function query_polar_question(url_mongo, db_name, collection_name, query, projection, sort, callback) {
@@ -308,7 +288,7 @@ function combine_str_counting(arr_docs, type_data, callback) {
     if (type_data === "only_head") {
         var i = 0;
         function loop_only_head() {
-            obj_stat.big_str += arr_docs[i].title + "|" + arr_docs[i].story + "|"; //for big string and segment 1
+            obj_stat.big_str += arr_docs[i].title + "|" + arr_docs[i].story + "|"; //for big string and segment 1 time
             ++i;
             if (i < arr_docs.length) {
                 loop_only_head();
@@ -374,8 +354,7 @@ function combine_str_counting(arr_docs, type_data, callback) {
 function query_model_ln_and_deli_str(url_mongodb_motorcycle, url_mongodb_thaitext, big_str, callback) {
     segment_str(big_str, url_mongodb_motorcycle, url_mongodb_thaitext, function (str_out_cut) { //SEGMENTATION
         var str_out = str_out_cut;
-        find_document_sort(url_mongodb_motorcycle, "motorcycle", "local_dict", {type: "รุ่นของรถ"},
-        {"word": 1, "_id": 0}, {length: -1}, function (arr_local_word) {
+        find_document_sort(url_mongodb_motorcycle, "motorcycle", "local_dict", {type: "รุ�?�?�?อ�?รถ"}, {"word": 1, "_id": 0}, {length: -1}, function (arr_local_word) {
             var j = 0;
             function loop_replace_model() {
                 str_out = replace_all(str_out, arr_local_word[j].word, "||m" + arr_local_word[j].word);
@@ -383,72 +362,12 @@ function query_model_ln_and_deli_str(url_mongodb_motorcycle, url_mongodb_thaitex
                 if (j < arr_local_word.length) {
                     loop_replace_model();
                 } else {
-                    //callback(str_out);
-                    var temp_removal = [ "กฎกระทรวง","เงินดาวน์","เงินดาว","ไฟแนนซ์","ดาวน์","ผ่อน","ภาษี","ประกัน"];
-                    var k = 0;
-                    function loop_removal_str(){
-                      var remo_word = temp_removal[k];
-                      var regex = "\\|\\|m(?:(?!\\|).)*" + temp_removal[k];
-                      var re = new RegExp(regex, "gi");
-                      str_out = str_out.replace(re,"|"+temp_removal[k]);
-
-                      var regex2 = temp_removal[k]+".*?\\|";
-                      var re2 = new RegExp(regex2, "gi");
-                      str_out = str_out.replace(re2,"|");
-
-                      ++k;
-                      if (k < temp_removal.length){
-                        loop_removal_str();
-                      } else {
-                        callback(str_out);
-                      }
-                    }
-                    loop_removal_str();
+                    callback(str_out);
                 }
             }
             loop_replace_model();
         });
     });
-}
-
-function query_model_ln_and_deli_str_v2(url_mongodb_motorcycle, url_mongodb_thaitext, big_str , chk_removal , callback){
-  segment_str(big_str, url_mongodb_motorcycle, url_mongodb_thaitext, function (str_out_cut) { //SEGMENTATION
-      var str_out = str_out_cut;
-      find_document_sort(url_mongodb_motorcycle, "motorcycle", "local_dict", {type: "รุ่นของรถ"},
-      {"word": 1, "_id": 0}, {length: -1}, function (arr_local_word) {
-          var j = 0;
-          function loop_replace_model() {
-              str_out = replace_all(str_out, arr_local_word[j].word, "||m" + arr_local_word[j].word);
-              ++j;
-              if (j < arr_local_word.length) {
-                  loop_replace_model();
-              } else {
-                  //callback(str_out);
-                  var temp_removal = ["เงินดาวน์","เงินดาว","ไฟแนนซ์","ดาวน์","ผ่อน","ภาษี","ประกัน"];
-                  var k = 0;
-                  function loop_removal_str(){
-                    var remo_word = temp_removal[k];
-                    var regex = "\\|\\|m(?:(?!\\|).)*" + temp_removal[k];
-                    var re = new RegExp(regex, "gi");
-                    str_out = str_out.replace(re,"|"+temp_removal[i]);
-
-                    var regex2 = temp_removal[i]+".*?\\|";
-                    var re2 = new RegExp(regex2, "gi");
-                    str_out = str_out.replace(re2,"|");
-
-                    ++k;
-                    if (k < temp_removal.length){
-                      loop_removal_str();
-                    } else {
-                      callback(str_out);
-                    }
-                  }
-                  loop_removal_str();
-              }
-          }
-          loop_replace_model();
-      });
-  });
 }
 
 function split_str_by_model(big_str, callback) {
@@ -459,8 +378,7 @@ function split_str_by_model(big_str, callback) {
     callback(matches_arr);
 }
 
-function chk_str_represent_brand(matches_arr, honda_model, yamaha_model, suzuki_model, kawasaki_model, other_model,
-        callback) {
+function chk_str_represent_brand(matches_arr, honda_model, yamaha_model, suzuki_model, kawasaki_model, other_model, callback) {
     var arr_model_for_match_arr = [];
     var l = 0;
 
@@ -528,19 +446,19 @@ function chk_str_represent_brand(matches_arr, honda_model, yamaha_model, suzuki_
     loop_arr_mes_model();
 }
 
-function sentiment_represent_brand(matches_arr, arr_model_for_match_arr, negative_word, positive_word,
-question_word, callback) {
-    var honda_cal = [0, 0, 0]; var yamaha_cal = [0, 0, 0];
-    var suzuki_cal = [0, 0, 0]; var kawasaki_cal = [0, 0, 0]; var other_cal = [0, 0, 0];
+function sentiment_represent_brand(matches_arr, arr_model_for_match_arr, negative_word, positive_word, question_word, callback) {
+    var honda_cal = [0, 0, 0];
+    var yamaha_cal = [0, 0, 0];
+    var suzuki_cal = [0, 0, 0];
+    var kawasaki_cal = [0, 0, 0];
+    var other_cal = [0, 0, 0];
     var str_for_show = [];
-    var negative_word = negative_word; var positive_word = positive_word; var question_word = question_word;
-
-    var arr_star_str = [];
+    var negative_word = negative_word;
+    var positive_word = positive_word;
+    var question_word = question_word;
 
     var cb = 0;
     function loop_chk_brand() {
-        var star_str = "";
-
         var str_main = matches_arr[cb];
         if (arr_model_for_match_arr[cb] !== "undefined_brand") {
             var nega_in = 0;
@@ -592,29 +510,6 @@ question_word, callback) {
             }
             loop_question();
 
-            var sum_nega_posi = nega_in + posi_in;
-            var neg_star = 0;
-            var pos_star = 0;
-
-            if(sum_nega_posi > 0){
-              var avr_neg = (nega_in * 100) / sum_nega_posi;
-              var avr_pos = (posi_in * 100) / sum_nega_posi;
-
-              neg_star = Math.ceil(avr_neg / 20);
-              pos_star = Math.ceil(avr_pos / 20)
-
-              if(neg_star === 0) neg_star = 1;
-              if(pos_star === 0) pos_star = 1;
-
-            }else {
-              neg_star = 3; pos_star = 3;
-            }
-            var ne_st = ""; var po_st = "";
-            while(neg_star--){ ne_st += "<img src=\"image/starred.png\" width=\"15\">"; }
-            while(pos_star--){ po_st += "<img src=\"image/stargreen.png\" width=\"15\">"; }
-
-            star_str = ""+ po_st + "<br/>"+ne_st;
-
             if (arr_model_for_match_arr[cb] === "Honda") {
                 honda_cal[0] += nega_in;
                 honda_cal[1] += posi_in;
@@ -641,17 +536,14 @@ question_word, callback) {
                 other_cal[2] += ques_in;
             }
         }
-
-        arr_star_str.push(star_str);
         str_for_show.push(str_main);
-
         ++cb;
-        if (cb < arr_model_for_match_arr.length) { loop_chk_brand(); }
+        if (cb < arr_model_for_match_arr.length) {
+            loop_chk_brand();
+        }
         else {
             callback({
-                honda_cal: honda_cal, yamaha_cal: yamaha_cal, suzuki_cal: suzuki_cal, kawasaki_cal:
-                        kawasaki_cal, other_cal: other_cal, str_for_show: str_for_show,
-                        arr_star_str : arr_star_str
+                honda_cal: honda_cal, yamaha_cal: yamaha_cal, suzuki_cal: suzuki_cal, kawasaki_cal: kawasaki_cal, other_cal: other_cal, str_for_show: str_for_show
             });
         }
     }
@@ -659,23 +551,34 @@ question_word, callback) {
 }
 /*
  function find_model_return_real_word(model_word,url_mongodb_motorcycle,callback){
-
+ 
  }
  */
 function sentiment_represent_model(matches_arr, arr_model_for_match_arr, negative_word, positive_word, question_word, callback) {
-    var honda_cal = {}; var yamaha_cal = {}; var suzuki_cal = {}; var kawasaki_cal = {}; var other_cal = {};
-    var str_for_show = []; var negative_word = negative_word; var positive_word = positive_word; var question_word = question_word;
-
-    var arr_star_str = [];
+    var honda_cal = {};
+    var yamaha_cal = {};
+    var suzuki_cal = {};
+    var kawasaki_cal = {};
+    var other_cal = {};
+    var str_for_show = [];
+    var negative_word = negative_word;
+    var positive_word = positive_word;
+    var question_word = question_word;
 
     var cb = 0;
     function loop_chk_brand() {
         var str_main = matches_arr[cb];
-        var star_str = "";
-
         if (arr_model_for_match_arr[cb] !== "undefined_brand") {
-            var msg = str_main; var txt_split = msg.split(" "); var model = txt_split[0];
-            var nega_in = 0; var posi_in = 0; var ques_in = 0;
+            var msg = str_main;
+            var txt_split = msg.split(" ");
+            var model = txt_split[0];
+
+
+            //find model by real main_word
+
+            var nega_in = 0;
+            var posi_in = 0;
+            var ques_in = 0;
 
             var ne = 0;
             function loop_negative() {
@@ -686,7 +589,9 @@ function sentiment_represent_model(matches_arr, arr_model_for_match_arr, negativ
                     ++nega_in;
                 }
                 ++ne;
-                if (ne < negative_word.length) { loop_negative(); }
+                if (ne < negative_word.length) {
+                    loop_negative();
+                }
             }
             loop_negative();
 
@@ -719,29 +624,6 @@ function sentiment_represent_model(matches_arr, arr_model_for_match_arr, negativ
                 }
             }
             loop_question();
-
-            var sum_nega_posi = nega_in + posi_in;
-            var neg_star = 0;
-            var pos_star = 0;
-
-            if(sum_nega_posi > 0){
-              var avr_neg = (nega_in * 100) / sum_nega_posi;
-              var avr_pos = (posi_in * 100) / sum_nega_posi;
-
-              neg_star = Math.ceil(avr_neg / 20);
-              pos_star = Math.ceil(avr_pos / 20)
-
-              if(neg_star === 0) neg_star = 1;
-              if(pos_star === 0) pos_star = 1;
-
-            }else {
-              neg_star = 3; pos_star = 3;
-            }
-            var ne_st = ""; var po_st = "";
-            while(neg_star--){ ne_st += "<img src=\"image/starred.png\" width=\"15\">"; }
-            while(pos_star--){ po_st += "<img src=\"image/stargreen.png\" width=\"15\">"; }
-
-            star_str = ""+ po_st + "<br/>"+ne_st;
 
             if (arr_model_for_match_arr[cb] === "Honda") {
                 if (typeof honda_cal[model] === "undefined") {
@@ -805,18 +687,15 @@ function sentiment_represent_model(matches_arr, arr_model_for_match_arr, negativ
             }
         }
 
-        arr_star_str.push(star_str);
-        str_for_show.push(str_main);
 
+        str_for_show.push(str_main);
         ++cb;
         if (cb < arr_model_for_match_arr.length) {
             loop_chk_brand();
         }
         else {
             callback({
-                honda_cal: honda_cal, yamaha_cal: yamaha_cal, suzuki_cal: suzuki_cal,
-                kawasaki_cal: kawasaki_cal, other_cal: other_cal, str_for_show: str_for_show,
-                arr_star_str : arr_star_str
+                honda_cal: honda_cal, yamaha_cal: yamaha_cal, suzuki_cal: suzuki_cal, kawasaki_cal: kawasaki_cal, other_cal: other_cal, str_for_show: str_for_show
             });
         }
     }
@@ -831,8 +710,11 @@ function query_all_model(url_mongodb_motorcycle, callback) {
 
 function loop_counting_model(model_arr, big_str, callback) {
     ///////////stat/////////////////////
-    var arr_honda_count = []; var arr_yamaha_count = []; var arr_suzuki_count = [];
-    var arr_kawasaki_count = []; var arr_other_count = [];
+    var arr_honda_count = [];
+    var arr_yamaha_count = [];
+    var arr_suzuki_count = [];
+    var arr_kawasaki_count = [];
+    var arr_other_count = [];
 
     var i = 0;
     function loop_model() {
@@ -915,8 +797,7 @@ function counting_model(start_time, end_time, type_data, url_mongodb_motorcycle,
                 obj_stat = object_stat;  //obj_stat.big_str //stat head and comment
                 segment_str(obj_stat.big_str, url_mongodb_motorcycle, url_mongodb_thaitext, function (str_out_cut) { //SEGMENTATION
                     big_str = str_out_cut;
-                    loop_counting_model(model, big_str, function (array_counting) {
-                        ////count_complete_with_color_string
+                    loop_counting_model(model, big_str, function (array_counting) { //count_complete_with_color_string
                         //callback(array_counting);
                         obj_count = array_counting; //stat model frequency
                         split_str_by_model(obj_count.big_str, function (match_arr) {
@@ -925,6 +806,14 @@ function counting_model(start_time, end_time, type_data, url_mongodb_motorcycle,
                         });
                     });
                 });
+
+
+
+
+                /*callback({
+                 model_arr : model,
+                 obj_stat : obj_stat
+                 });*/
             });
         });
     });
@@ -934,15 +823,21 @@ function sentiment_head_v2(start_time, end_time, url_mongodb_motorcycle, url_mon
     var obj_stat = {}; // big_str , topic_count , comment_count
     var big_str = "";
     var arr_docs = [];
-    var honda_model = []; var yamaha_model = []; var suzuki_model = []; var kawasaki_model = [];
+    var honda_model = [];
+    var yamaha_model = [];
+    var suzuki_model = [];
+    var kawasaki_model = [];
     var other_model = [];
-    var negative_word = []; var positive_word = [];var question_word = [];
+    var negative_word = [];
+    var positive_word = [];
+    var question_word = [];
     var matches_arr = [];
     var arr_model_for_match_arr = [];
 
     query_mocy_data_by_time(start_time, end_time, url_mongodb_motorcycle,
             {datetime: {$gte: new Date(start_time), $lte: new Date(end_time)}},
-    {"title": 1, "story": 1, "_id": 0},{datetime: -1}, //sentiment_head not query comment
+    {"title": 1, "story": 1, "_id": 0}, //sentiment_head not query comment
+    {datetime: -1},
     function (arr_documents) {
         arr_docs = arr_documents;
         query_model_bybrand(url_mongodb_motorcycle, "Honda", function (arr_honda_model) {
@@ -984,8 +879,7 @@ function sentiment_head_v2(start_time, end_time, url_mongodb_motorcycle, url_mon
                                                                 other_cal: obj_sentiment.other_cal,
                                                                 str_for_show: obj_sentiment.str_for_show,
                                                                 topic_head_count: obj_stat.topic_count,
-                                                                comment_count: obj_stat.comment_count,
-                                                                arr_star_str : obj_sentiment.arr_star_str
+                                                                comment_count: obj_stat.comment_count
                                                             });
                                                         });
                                                     });
@@ -1005,15 +899,23 @@ function sentiment_head_v2(start_time, end_time, url_mongodb_motorcycle, url_mon
 
 function sentiment_comment_v2(start_time, end_time, type_data, url_mongodb_motorcycle, url_mongodb_thaitext, callback) {
     var obj_stat = {}; // big_str , topic_count , comment_count
-    var big_str = ""; var arr_docs = [];
-    var honda_model = []; var yamaha_model = []; var suzuki_model = [];var kawasaki_model = [];var other_model = [];
-    var negative_word = []; var positive_word = []; var question_word = [];
-    var matches_arr = []; var arr_model_for_match_arr = [];
+    var big_str = "";
+    var arr_docs = [];
+    var honda_model = [];
+    var yamaha_model = [];
+    var suzuki_model = [];
+    var kawasaki_model = [];
+    var other_model = [];
+    var negative_word = [];
+    var positive_word = [];
+    var question_word = [];
+    var matches_arr = [];
+    var arr_model_for_match_arr = [];
 
     query_mocy_data_by_time(start_time, end_time, url_mongodb_motorcycle,
             {datetime: {$gte: new Date(start_time), $lte: new Date(end_time)}},
-    {"title": 1, "story": 1, "comment": 1, "_id": 0},{datetime: -1}, //query_comment
-
+    {"title": 1, "story": 1, "comment": 1, "_id": 0}, //sentiment_head not query comment
+    {datetime: -1},
     function (arr_documents) {
         arr_docs = arr_documents;
         query_model_bybrand(url_mongodb_motorcycle, "Honda", function (arr_honda_model) {
@@ -1055,8 +957,7 @@ function sentiment_comment_v2(start_time, end_time, type_data, url_mongodb_motor
                                                                 other_cal: obj_sentiment.other_cal,
                                                                 str_for_show: obj_sentiment.str_for_show,
                                                                 topic_head_count: obj_stat.topic_count,
-                                                                comment_count: obj_stat.comment_count,
-                                                                arr_star_str : obj_sentiment.arr_star_str
+                                                                comment_count: obj_stat.comment_count
                                                             });
                                                         });
                                                     });
@@ -1076,18 +977,29 @@ function sentiment_comment_v2(start_time, end_time, type_data, url_mongodb_motor
 
 function sentiment_model(start_time, end_time, type_data, url_mongodb_motorcycle, url_mongodb_thaitext, callback) {
     var obj_stat = {}; // big_str , topic_count , comment_count
-    var big_str = ""; var arr_docs = [];
-    var honda_model = []; var yamaha_model = []; var suzuki_model = []; var kawasaki_model = []; var other_model = [];
-    var negative_word = []; var positive_word = []; var question_word = [];
-    var matches_arr = []; var arr_model_for_match_arr = [];
+    var big_str = "";
+    var arr_docs = [];
+    var honda_model = [];
+    var yamaha_model = [];
+    var suzuki_model = [];
+    var kawasaki_model = [];
+    var other_model = [];
+    var negative_word = [];
+    var positive_word = [];
+    var question_word = [];
+    var matches_arr = [];
+    var arr_model_for_match_arr = [];
     var projection = {};
-    if (type_data === "only_head") { projection = {"title": 1, "story": 1, "_id": 0}; }
-    else { projection = {"title": 1, "story": 1, "comment": 1, "_id": 0}; }
-
-    var arr_star_str = [];
+    if (type_data === "only_head") {
+        projection = {"title": 1, "story": 1, "_id": 0};
+    } else {
+        projection = {"title": 1, "story": 1, "comment": 1, "_id": 0};
+    }
 
     query_mocy_data_by_time(start_time, end_time, url_mongodb_motorcycle,
-            {datetime: {$gte: new Date(start_time), $lte: new Date(end_time)}}, projection,{datetime: -1},
+            {datetime: {$gte: new Date(start_time), $lte: new Date(end_time)}},
+    projection,
+            {datetime: -1},
     function (arr_documents) {
         arr_docs = arr_documents;
         query_model_bybrand(url_mongodb_motorcycle, "Honda", function (arr_honda_model) {
@@ -1121,17 +1033,16 @@ function sentiment_model(start_time, end_time, type_data, url_mongodb_motorcycle
                                                         //callback({ matches_arr : matches_arr , arr_model_for_match_arr : arr_model_for_match_arr });
                                                         sentiment_represent_model(matches_arr, arr_model_for_match_arr, negative_word, positive_word, question_word, function (obj_sentiment) {
                                                             callback({
-                                                                model_txt : matches_arr,
-                                                                brand_txt : arr_model_for_match_arr,
-                                                                honda_cal : obj_sentiment.honda_cal,
-                                                                yamaha_cal : obj_sentiment.yamaha_cal,
-                                                                suzuki_cal : obj_sentiment.suzuki_cal,
-                                                                kawasaki_cal : obj_sentiment.kawasaki_cal,
-                                                                other_cal : obj_sentiment.other_cal,
-                                                                str_for_show : obj_sentiment.str_for_show,
-                                                                topic_head_count : obj_stat.topic_count,
-                                                                comment_count : obj_stat.comment_count,
-                                                                arr_star_str : obj_sentiment.arr_star_str
+                                                                model_txt: matches_arr,
+                                                                brand_txt: arr_model_for_match_arr,
+                                                                honda_cal: obj_sentiment.honda_cal,
+                                                                yamaha_cal: obj_sentiment.yamaha_cal,
+                                                                suzuki_cal: obj_sentiment.suzuki_cal,
+                                                                kawasaki_cal: obj_sentiment.kawasaki_cal,
+                                                                other_cal: obj_sentiment.other_cal,
+                                                                str_for_show: obj_sentiment.str_for_show,
+                                                                topic_head_count: obj_stat.topic_count,
+                                                                comment_count: obj_stat.comment_count
                                                             });
                                                         });
                                                     });
@@ -1173,7 +1084,7 @@ function sentiment_head(start_time, end_time, url_mongodb_motorcycle, url_mongod
                 loop();
             } else {
                 segment_str(big_str_head, url_mongodb_motorcycle, url_mongodb_thaitext, function (str_out) {
-                    find_document_sort(url_mongodb_motorcycle, "motorcycle", "local_dict", {type: "รุ่นของรถ"}, {"word": 1, "_id": 0}, {length: -1}, function (arr_local_word) {
+                    find_document_sort(url_mongodb_motorcycle, "motorcycle", "local_dict", {type: "รุ�?�?�?อ�?รถ"}, {"word": 1, "_id": 0}, {length: -1}, function (arr_local_word) {
 
                         var j = 0;
                         function loop_replace_model() {
@@ -1473,7 +1384,7 @@ function sentiment_comment(start_time, end_time, type_data, url_mongodb_motorcyc
                 loop();
             } else {
                 segment_str(big_str, url_mongodb_motorcycle, url_mongodb_thaitext, function (str_out) {
-                    find_document_sort(url_mongodb_motorcycle, "motorcycle", "local_dict", {type: "รุ่นของรถ"}, {"word": 1, "_id": 0}, {length: -1}, function (arr_local_word) {
+                    find_document_sort(url_mongodb_motorcycle, "motorcycle", "local_dict", {type: "รุ�?�?�?อ�?รถ"}, {"word": 1, "_id": 0}, {length: -1}, function (arr_local_word) {
 
                         var j = 0;
                         function loop_replace_model() {

@@ -1,6 +1,6 @@
 <script>
     $(function () {
-        $(".datepicker").datepicker({dateFormat: 'dd-mm-yy'});
+        $(".datepicker").datepicker({dateFormat: 'dd - mm - yy'});
     });
 </script>
 
@@ -9,18 +9,106 @@
         <div class="container" style="width: 100%;">
             <div class="specific-background">
                 <h4>Choose Time</h4>
+
                 <input style="width: 45%" type="text" 
                        class="datepicker" 
                        placeholder="Start Date" 
                        onfocus="this.placeholder = ''" 
                        onblur="this.placeholder = 'Start Date'" 
-                       id="st_d"  ng-model="st_date" readonly> &nbsp;-&nbsp;
+                       id="st_d"  ng-model="st_date" readonly> &nbsp;<b>-</b>&nbsp;
                 <input style="width: 45%" type="text" 
                        class="datepicker" placeholder="End Date" 
                        onfocus="this.placeholder = ''" 
                        onblur="this.placeholder = 'End Date'" 
                        id="en_d"  ng-model="en_date" readonly>
+                <br/><br/>
+                <h4>ประเภทการแสดงผล</h4>
+                <input type="radio" ng-model="graph_choose" value="graph_only"/> แสดงกราฟอย่างเดียว &nbsp;
+                <input type="radio" ng-model="graph_choose" value="graph_data"/> กราฟ + ข้อมูล
+                <br/><br/>
+                <h4>การแสดงยี่ห้อของกราฟ</h4>
+                <input type="checkbox" ng-model="graph_honda"/>
+                Honda&nbsp;
+                <input type="checkbox" ng-model="graph_yamaha"/>
+                Yamaha&nbsp;
+                <input type="checkbox" ng-model="graph_suzuki"/>
+                Suzuki&nbsp;
+                <input type="checkbox" ng-model="graph_kawasaki"/>
+                Kawasaki&nbsp;
+                <input type="checkbox" ng-model="graph_other"/>
+                Other&nbsp;
+                <br/><br/>
+                <button style="width: 90%;" ng-click="sentiment_head(st_date, en_date)" class="btn btn-success"> Sentiment Head </button>
+
+            </div>
+            <br/><br/>
+            <div class="row">
+                <div class="col-xs-8">
+                    <div id="chart_senti_head" style="height: 300px; width: 100%;"></div>
+                </div>
+                <div class="col-xs-4">
+                    <div align="center">
+                        <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><i class="fa fa-frown-o"></i>&nbsp;-</th>
+                                    <th><i class="fa fa-smile-o"></i>&nbsp;+</th>
+                                    <th><i class="fa fa-question-circle"></i>&nbsp;?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="temp in count_polar">
+                                    <td>{{temp.brand}}</td>
+                                    <td>{{temp.nega}}</td>
+                                    <td>{{temp.posi}}</td>
+                                    <td>{{temp.ques}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        จำนวนกระทู้ที่ใช้ในการวิเคราะห์ {{topic_head_count}} กระทู้ 
+                        <br/>
+                        โดยตัดเป็นข้อความที่มีชื่อรุ่นและยี่ห้อ {{message_count}} ข้อความ
+                    </div>
+                </div>
+            </div>
+            <div ng-hide="hide_data">
+                <!--<div id="show_data">
+                    <h3>ข้อมูล Honda</h3>
+                    <div ng-bind-html="str_honda"></div>
+                    <br/>
+                    <h3>ข้อมูล Yamaha</h3>
+                    <div ng-bind-html="str_yamaha"></div>
+                </div>-->
+                <div align="right">
+                    <i class="fa fa-search"></i>&nbsp;
+                    <input type="text" ng-model="search_senti_head"
+                           placeholder="Search" 
+                           onfocus="this.placeholder = ''" 
+                           onblur="this.placeholder = 'Search'" />
+                </div>
+                <br/>
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead>
+                        <tr>
+                            <th width="5%">No.</th>
+                            <th width="75%">Message</th>
+                            <th width="10%">Brand</th>
+                            <th width="10%">Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="temp in message_by_brand| filter: search_senti_head ">
+                            <td>{{$index + 1}}</td>
+                            <td><div ng-bind-html="temp.message"></div></td>
+                            <td>{{temp.brand}}</td>
+                            <td><div ng-bind-html="temp.star"></div></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+
     </section>
 </section>

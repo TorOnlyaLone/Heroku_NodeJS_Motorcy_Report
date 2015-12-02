@@ -25,6 +25,12 @@ app.config(['$routeProvider', /* '$locationProvider',*/
         }).when('/question_manage', {
             templateUrl: '../pages/backend/03_question_manage.html',
             controller: 'QuestionManageCtrl'
+        }).when('/motorcy_dict', {
+            templateUrl: '../pages/backend/04_motorcy_dict.html',
+            controller: 'MotorcyDictCtrl'
+        }).when('/teaching_word', {
+            templateUrl: '../pages/backend/05_teaching_word.html',
+            controller: 'TeachingWordCtrl'
         }).when('/report_head', {
             templateUrl: '../pages/frontend/00_Report_Head.html',
             controller: 'ReportHeadCtrl'
@@ -37,6 +43,12 @@ app.config(['$routeProvider', /* '$locationProvider',*/
         }).when('/report_data', {
             templateUrl: '../pages/frontend/03_Report_Data.html',
             controller: 'ReportDataCtrl'
+        }).when('/report_sentiment_model', {
+            templateUrl: '../pages/frontend/04_Report_Senti_Model.html',
+            controller: 'ReportSentiModelCtrl'
+        }).when('/feature_manage', {
+            templateUrl: '../pages/backend/06_polar_feature_man.html',
+            controller: 'FeaturePolarCtrl'
         });
         // $locationProvider.html5Mode(true);
     }]);

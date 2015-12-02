@@ -1,6 +1,6 @@
 <script>
     $(function () {
-        $(".datepicker").datepicker({dateFormat: 'dd-mm-yy'});
+        $(".datepicker").datepicker({dateFormat: 'dd - mm - yy'});
     });
 </script>
 
@@ -9,18 +9,62 @@
         <div class="container" style="width: 100%;">
             <div class="specific-background">
                 <h4>Choose Time</h4>
-                <input style="width: 45%" type="text" 
-                       class="datepicker" 
-                       placeholder="Start Date" 
-                       onfocus="this.placeholder = ''" 
-                       onblur="this.placeholder = 'Start Date'" 
-                       id="st_d"  ng-model="st_date" readonly> &nbsp;-&nbsp;
-                <input style="width: 45%" type="text" 
-                       class="datepicker" placeholder="End Date" 
-                       onfocus="this.placeholder = ''" 
-                       onblur="this.placeholder = 'End Date'" 
+                <input style="width: 45%" type="text" class="datepicker"  placeholder="Start Date" 
+                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Start Date'" 
+                       id="st_d"  ng-model="st_date" readonly> &nbsp;<b>-</b>&nbsp;
+                <input style="width: 45%" type="text" class="datepicker" placeholder="End Date" 
+                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'End Date'" 
                        id="en_d"  ng-model="en_date" readonly>
-            </div>
+                <br/><br/>
+                <h4>ประเภทของข้อมูล</h4>
+                <input type="radio" ng-model="type_choose" value="only_head" /> หัวกระทู้อย่างเดียว &nbsp;
+                <input type="radio" ng-model="type_choose" value="head_comment" /> หัวกระทู้ + ความคิดเห็น &nbsp;
+                <input type="radio" ng-model="type_choose" value="only_comment" /> ความคิดเห็นอย่างเดียว (ไม่เอาหัวกระทู้)
+                <br/><br/>
+                <h4>ประเภทการแสดงผล</h4>
+                <input type="radio" ng-model="graph_choose" value="graph_only"/> แสดงกราฟอย่างเดียว &nbsp;
+                <input type="radio" ng-model="graph_choose" value="graph_data"/> กราฟ + ข้อมูล <br/><br/>
+                <h4>เลือกยี่ห้อของกราฟ</h4>
+                <input type="checkbox" ng-model="graph_honda"/>Honda&nbsp;
+                <input type="checkbox" ng-model="graph_yamaha"/>Yamaha&nbsp;
+                <input type="checkbox" ng-model="graph_suzuki"/>Suzuki&nbsp;
+                <input type="checkbox" ng-model="graph_kawasaki"/>Kawasaki&nbsp;
+                <input type="checkbox" ng-model="graph_other"/>Other&nbsp; <br/><br/>
+                <button style="width: 90%;" ng-click="counting_model(st_date, en_date)" class="btn btn-success">
+                Get Data </button>
+            </div><br/><br/>
+        </div>
+        <div>  
+            <div id="chart_count_model_honda" style="height: 300px; width: 100%;"></div>
+            <br/><br/><br/>
+            <div id="chart_count_model_yamaha" style="height: 300px; width: 100%;"></div>
+            <br/><br/><br/>
+            <div id="chart_count_model_suzuki" style="height: 300px; width: 100%;"></div>
+            <br/><br/><br/>
+            <div id="chart_count_model_kawasaki" style="height: 300px; width: 100%;"></div>
+            <br/><br/><br/>
+            <div id="chart_count_model_other" style="height: 300px; width: 100%;"></div>
+        </div><br/>
+        <div id="show_data">
+            <div align="right">
+                <i class="fa fa-search"></i>&nbsp;
+                <input type="text" ng-model="search_count_model" placeholder="Search" 
+                       onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" />
+            </div><br/>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="temp in message_count| filter: search_count_model">
+                        <td>{{$index + 1}}</td>
+                        <td><div ng-bind-html="temp.message"></div></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </section>
 </section>
